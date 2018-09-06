@@ -1,0 +1,9 @@
+[{
+	"index": 1,
+	"label": "Doelgroep",
+	"type": "input",
+	"values": {
+		"subType": "text"
+	},
+	"placeholder": "Jongeren"
+}]

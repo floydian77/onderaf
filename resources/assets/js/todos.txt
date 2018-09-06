@@ -1,0 +1,91 @@
+
+
+
+should make a formLayoutItem table
+perhaps formEntryItem too
+
+on async action:
+    loading indicator on button
+    notifaction on success / failure
+
+
+DONE create breadcrumb component
+
+add form layout preview in layout editor
+
+
+creeer pending initiatief bij invullen form 
+add initiative status (pending, processed)
+
+status en cat. tags in initiatief tabel
+
+
+organisatie hoeft geen gebruiker te hebben
+initiatief hoeft geen gebruiker te hebben
+
+remove groups and property folders; confusing naming
+
+change formlayout table name to layout
+remove domain variable from most code?
+
+add 'list editor' (array) and 'table editor' (json)
+    object list (json)
+    value list (array)
+    might as well since it adds powerful functions
+    create a custom 'form' type?
+
+domains; use only for GUI, not for inner workings
+
+actions:
+    getAll(fill), find, edit, remove
+    parse JSON fields on GET
+    encode JSON fields on POST
+        check if property type is JSON
+
+
+add mixins to remove boilerplate..
+
+
+
+
+
+model:
+    name
+    labels
+    properties
+        name
+        type
+            text, select, checkbox (media later), JSON (see below), relation (see below)
+                text can have placeholder and / or default text (value)
+                select must have array value with atleast one item 
+                    if select has one value, it is inactive
+                checkbox must have a starting true / false value
+        value (optional; default value)
+        placeholder (optional; UI purpose)
+        showInTable (optional, default true)
+        validation
+            see contentful validation
+
+
+model relation property
+
+
+model JSON properties
+    ! use this at all? just add another table
+        add properties with built in functionality, such as hasIndex
+        
+    general JSON editor, any structure allowed?
+    or pre-defined JSON structures
+    for now, only use JSON for nested properties? probably
+        this means a JSON property is a list of objects
+        edit a JSON property with a table
+    for example, form layout:
+        list of objects (form components)
+            index
+                default property
+            type (type, default, placeholder)
+            subType
+            placeholder
+            label
+                                                                                                                                                                                  
+     

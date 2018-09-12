@@ -108,7 +108,7 @@ const store2 = new Vuex.Store({
     },
 })  
 
-console.log(store2);
+// console.log(store2);
 
 
 const store = new Vuex.Store({
@@ -231,8 +231,8 @@ const store = new Vuex.Store({
         },
         updateEntry (state, payload) {
             let i = state.forms.entries.findIndex(entry => entry.id === payload.id);
-            console.log(state);
-            console.log(payload);
+            // console.log(state);
+            // console.log(payload);
             state.forms.entries[i] = { ...state.forms.entries[i], ...payload };
         },
         deleteEntry (state, payload) {
@@ -555,7 +555,7 @@ const store = new Vuex.Store({
                 // todo add to database here, success and fail flags
                 commit('updateEntry', entry)
                 dispatch('setNotification', Notifications['form-entry-updated'])
-                console.log(response);
+                // console.log(response);
             })
             .catch(function (error) { 
                 dispatch('setNotification', Notifications['failed'])

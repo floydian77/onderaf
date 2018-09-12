@@ -10,8 +10,19 @@ class Entry extends Model
     {
         return $this->belongsTo('App\Layout');
     }
-    public function initiative()
+    // public function initiative()
+    // {
+    //     return $this->belongsTo('App\Initiative');
+    // }
+    // public function categoriesIds()
+    // {
+    //     // return $this->belongsToMany('App\Category')->lists('id');
+    //     // return $this->belongsToMany('App\Category');
+    //     return $this->categories->get()->pluck('id');
+    // }
+    public function categories()
     {
-        return $this->belongsTo('App\Initiative');
+        // return $this->belongsToMany('App\Category')->lists('id');
+        return $this->belongsToMany('App\Category');
     }
 }

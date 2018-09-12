@@ -24,6 +24,10 @@
     export default {
         props: ['id', 'modelName'],
         created() {
+            // console.log('blabla');
+            // console.log(this.id);
+            // console.log(this.modelName);
+            
         },
         computed: {
             loaded() {

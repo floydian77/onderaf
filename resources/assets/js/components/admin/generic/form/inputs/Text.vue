@@ -12,6 +12,11 @@
 <script>
     export default {
         props: ['item', 'prop', 'propKey', 'hideLabel'],
+        created() {
+            // console.log('text');
+            // console.log(this.item);
+            // console.log(this.propKey);
+        },
         computed: {
             value: {
                 get() {

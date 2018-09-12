@@ -100,7 +100,7 @@
         watch: {
             loaded (loaded) {
                 if (loaded) {
-                    console.log('TEST2')
+                    // console.log('TEST2')
                     this.editedLayout = JSON.parse(JSON.stringify(this.layout))
                 }
             },
@@ -154,7 +154,7 @@
                 Events.$emit('sendFormLayout', this.editedLayout);
             },
             subType(item) {
-                return item.values && item.values.subType ? item.values.subType : 'text' 
+                return item.values && item.values.subType ? item.values.subType : 'textfield' 
             },
             addField() {
                 // todo better solution?

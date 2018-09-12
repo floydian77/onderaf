@@ -36,3 +36,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 
 // todo temp
 Route::view('/back-test', 'back-test');
+
+

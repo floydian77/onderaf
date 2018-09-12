@@ -33,7 +33,7 @@
         },
         methods: {
             label(name) {
-                console.log(name);
+                // console.log(name);
                 
                 let label = ModelRouteNamesToLabels(this.modelName)[name]
 

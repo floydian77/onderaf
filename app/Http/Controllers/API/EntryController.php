@@ -17,7 +17,14 @@ class EntryController extends Controller
      */
     public function index(Response $response)
     {
-        return response(Entry::all()->jsonSerialize(), Response::HTTP_OK);
+        $entries = Entry::all();
+
+        // add pivot data
+        foreach($entries as $entry) {
+            $entry->categories = $entry->categories;
+        }
+
+        return response($entries->jsonSerialize(), Response::HTTP_OK);
     }
 
     /**
@@ -31,7 +38,7 @@ class EntryController extends Controller
         $entry = new Entry();
         $entry->layout = $request->layout;
         $entry->data = $request->data;
-        $entry->initiative = $request->initiative;
+        // $entry->initiative = $request->initiative;
         $entry->save();
       
         return response($entry, Response::HTTP_CREATED);
@@ -45,6 +52,8 @@ class EntryController extends Controller
      */
     public function show(Entry $entry)
     {
+        // add pivot data
+        $entry->categories = $entry->categories;
         return $entry;
     }
 
@@ -57,14 +66,19 @@ class EntryController extends Controller
      */
     public function update(Request $request, Entry $entry)
     {
-        // $test = Layout::findOrFail($request->Layout);
-        // $entry->_layout = $request->Layout;
+        $ids = [];
+
+        foreach ($request->categories as $category) {
+            array_push($ids, intval($category['id']));
+        }
+
         $entry->layout = $request->layout;
-        $entry->initiative = $request->initiative;
+        $entry->categories()->sync($ids);
         $entry->data = $request->data;
+        $entry->status = $request->status;
         $entry->save();
 
-        return response($entry, Response::HTTP_OK);
+        return response($ids, Response::HTTP_OK);
     }
 
     /**
@@ -79,4 +93,21 @@ class EntryController extends Controller
 
         return response(null, Response::HTTP_OK);
     }
+
+    /**
+     * Show associated categories
+     *
+     * @param  \App\Entry  $entry
+     * @return \Illuminate\Http\Response
+     */
+    // public function categories($id)
+    // {
+    //     // $entry->delete();
+
+    //     // return response($entry->initiative->categories, Response::HTTP_OK);
+    //     // return response($entry, Response::HTTP_OK);
+        
+    //     return \App\Entry::find($id)->initiative();
+    // }
+
 }

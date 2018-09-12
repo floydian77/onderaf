@@ -12,12 +12,17 @@ class Category extends Model
     {
         return $this->hasOne('App\Category');
     }
-    public function initiatives()
-    {
-        return $this->belongsToMany('App\Initiative');
-    }
+    // public function initiatives()
+    // {
+    //     return $this->belongsToMany('App\Initiative');
+    // }
     public function organisations()
     {
         return $this->belongsToMany('App\Organisation');
     }
+    public function entries()
+    {
+        return $this->belongsToMany('App\Entry');
+    }
+
 }

@@ -22,7 +22,8 @@
                     </Row>
                 </slot>
             </Table>
-            <router-link tag="button" :to="urls.CREATE"> 
+            <!-- todo extract if check to config -->
+            <router-link v-if="!modelName == 'entries'" tag="button" :to="urls.CREATE"> 
                 {{ labels.CREATE }}
             </router-link>
         </div>

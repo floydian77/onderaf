@@ -1,7 +1,7 @@
 <template>
     <div>
         <div v-if="loaded">
-            <div v-for="(field, index) in formData" :key="index">
+            <!-- <div v-for="(field, index) in formData" :key="index">
                 <div v-if="!!getFieldLayout(field.id)">
                     <component  :item="field" 
                                 :prop="getFieldLayout(field.id)" 
@@ -9,6 +9,13 @@
                                 :is="components.input[getFieldLayout(field.id).type]">
                                 </component>
                 </div>
+            </div> -->
+            <div v-for="(field, index) in layout" :key="index">
+                <component  :item="getFieldData(field.id)" 
+                            :prop="formatField(field)" 
+                            propKey="value" 
+                            :is="components.input[field.type]">
+                            </component>
             </div>
         </div>
     </div>
@@ -22,11 +29,14 @@
         data() {
             return {
                 components: Components,
-                formData: []
+                formData: [],
+                layoutId: this.$route.params.id 
             }
         },
         created() {
-            this.formData = JSON.parse(this.item[this.propKey])
+            this.formData = this.item[this.propKey].length
+                            ? JSON.parse(this.item[this.propKey])
+                            : this.item[this.propKey];
         },
         watch: {
             formData: {
@@ -37,13 +47,30 @@
             },
         },
         methods: {
+            getFieldData(id) {
+                if (this.formData.length) {
+                    let data = this.formData.find(field => field.id === id)
+                    if (data) {
+                        return data
+                    }
+                }
+                this.formData.push({ id, value: '' })
+                return { id, value: '' }
+            },
+            formatField(field) {
+                if (!field.placeholder) field.placeholder = field.value
+
+                return field
+            },
             getFieldLayout(id) {
                 return this.layout.find(field => field.id === id)
+
             },
         },
         computed: {
             layout() {
-                let obj = this.$store.getters[ModelEventNames(this.prop.table).FIND](this.item.id)
+                let obj = this.$store.getters[ModelEventNames(this.prop.table).FIND](this.layoutId)
+                // console.log(JSON.parse(obj[this.propKey]));
                 return JSON.parse(obj[this.propKey])
             },
             loaded() {

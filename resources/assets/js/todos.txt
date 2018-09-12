@@ -46,6 +46,11 @@ actions:
 add mixins to remove boilerplate..
 
 
+big boi: 
+    extract most business logic in vue files to config / utility files
+    use mixins to further abstract and DRY the codebase
+
+
 
 
 
@@ -89,3 +94,9 @@ model JSON properties
             label
                                                                                                                                                                                   
      
+
+Layout > table
+Entry > table data
+
+config models in database
+Table (layout) default in Model

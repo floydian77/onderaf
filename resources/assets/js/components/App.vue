@@ -141,7 +141,7 @@
         /* Darkens bgc */
         filter: brightness(95%);
     }
-    .tags .tag {
+    .tags.big .tag {
         padding: 2rem;
         font-weight: 500;
     }

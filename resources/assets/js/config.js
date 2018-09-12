@@ -28,6 +28,8 @@ import Relation from './components/admin/generic/form/inputs/Relation.vue'
 import Table from './components/admin/generic/form/inputs/Table.vue'
 import Grid from './components/admin/generic/form/inputs/Grid.vue'
 import FormReference from './components/admin/generic/form/inputs/FormReference.vue'
+import Tags from './components/admin/generic/view/Tags.vue'
+import TextView from './components/admin/generic/view/Text.vue'
 
 
 // console.log(statics.TEST);
@@ -55,7 +57,7 @@ export const Models = {
         properties: {
             'name': {
                 label: 'Naam',
-                type: 'text',
+                type: 'textfield',
                 placeholder: 'Vul hier een naam in',
                 validation: {},
             },
@@ -70,7 +72,7 @@ export const Models = {
         properties: {
             'name': {
                 label: 'Naam',
-                type: 'text',
+                type: 'textfield',
                 placeholder: 'Vul hier een naam in',
                 validation: {},
             },
@@ -85,7 +87,7 @@ export const Models = {
         properties: {
             'name': {
                 label: 'Naam',
-                type: 'text',
+                type: 'textfield',
                 placeholder: 'Vul hier een naam in',
                 validation: {},
             },
@@ -100,7 +102,7 @@ export const Models = {
         properties: {
             'name': {
                 label: 'Naam',
-                type: 'text',
+                type: 'textfield',
                 placeholder: 'Vul hier een naam in',
                 validation: {},
             },
@@ -115,7 +117,7 @@ export const Models = {
         properties: {
             'name': {
                 label: 'Naam',
-                type: 'text',
+                type: 'textfield',
                 placeholder: 'Vul hier een naam in',
                 validation: {},
             },
@@ -132,25 +134,26 @@ export const Models = {
                 columns: {
                     'label': {
                         label: 'Label',
-                        type: 'text',
+                        type: 'textfield',
                         placeholder: 'Input / text label',
                         validation: {},
                     },
                     'value': {
                         label: 'Waardes / placeholder',
-                        type: 'text',
+                        type: 'textfield',
                         placeholder: 'Dropdown: waardes, tekst: placeholder',
                         validation: {},
                     },
                     'type': {
                         label: 'Type',
                         type: 'select',
-                        value: ['text', 'rich-text', 'textfield', 'dropdown', 'checkbox'], 
+                        value: ['text', 'rich-text', 'textfield', 'select', 'checkbox'], 
                         default: 0,
                         validation: {},
                     },
 
                 },
+                hideInList: true,
                 sortable: true,
                 validation: {},
             },
@@ -163,9 +166,17 @@ export const Models = {
             plural: 'Inzendingen'
         },
         properties: {
+            'status': {
+                label: 'Status',
+                adminOnly: true,
+                type: 'select',
+                value: ['pending', 'accepted'],
+                default: 0
+            },
             'data': {
                 // input data; reference to form layout
                 label: 'Data',
+                // todo change formReference to dataEntry, modelEntry, or entry, or w/e
                 type: 'formReference',
                 table: 'layouts',
                 property: 'data',
@@ -173,23 +184,45 @@ export const Models = {
             },
             'layout': {
                 label: 'Layout',
+                listView: {
+                    property: 'name'
+                },
                 // Foreign key
                 relation: {
                     table: 'layouts',
                     field: 'id',
-                    type: 'many_to_one'
+                    grouping: 'many_to_one',
+                    type: 'select'
                 },
                 type: 'relation',
                 static: true,
                 validation: {},
             },
-            'initiative': {
-                label: 'Initiatief',
+            // 'initiative': {
+            //     label: 'Initiatief',
+            //     // Foreign key
+            //     relation: {
+            //         table: 'initiatives',
+            //         field: 'id',
+            //         grouping: 'many_to_one',
+            //         type: 'select'
+            //     },
+            //     type: 'relation',
+            //     validation: {},
+            // },
+            'categories': {
+                label: 'Categorieen',
+                // hideInList: true,
+                listView: {
+                    type: 'tags',
+                    property: 'name'
+                },
                 // Foreign key
                 relation: {
-                    table: 'initiatives',
+                    table: 'categories',
                     field: 'id',
-                    type: 'many_to_one'
+                    grouping: 'many_to_many',
+                    type: 'multiselect'
                 },
                 type: 'relation',
                 validation: {},
@@ -244,12 +277,31 @@ export function NewModelItem(model) {
     for (let propKey in properties) {
         let prop = properties[propKey]
         
+        // console.log('type');
+        // console.log(prop.type);
+        // console.log('lafje');
+        // console.log(prop);
         // check property type, string > '', etc
-        if (prop.type == 'text') {
+        if (prop.type == 'textfield') {
             item[propKey] = ''
+        }
+        // select
+        if (prop.type == 'select') {
+            item[propKey] = prop.value[prop.default]
+        }
+        // formReference
+        if (prop.type == 'formReference') {
+            item.id = 1
+            item[propKey] = []
+        }
+        // relation
+        if (prop.type == 'relation') {
+            // first relation is default
+            item[propKey] = 1
         }
     }
 
+    
     return item
 }
 
@@ -314,12 +366,14 @@ export const ModelRoutesAndNames = () => {
         routes: {
             LIST:   '/:modelName',
             CREATE: '/:modelName/:action',
+            CREATE_ENTRY: '/:modelName/:action/layout/:id',
             EDIT:   '/:modelName/:action/:id',
         }, 
         names: {
             DOMAIN: 'domain',
             LIST:   'model-list',
             CREATE: 'model-create',
+            CREATE_ENTRY: 'model-create-entry',
             EDIT:   'model-edit',
         },
     }
@@ -333,6 +387,7 @@ export const ModelRouteNamesToLabels = (model) => {
         [names.DOMAIN]: labels.DOMAIN,
         [names.LIST]: labels.LIST, 
         [names.CREATE]: labels.CREATE, 
+        [names.CREATE_ENTRY]: labels.CREATE, 
         [names.EDIT]: labels.EDIT 
     }
 }
@@ -353,6 +408,7 @@ export const ModelRoutingLabelsAndUrls = (model, domain) => {
         urls: {
             LIST:   '/' + model,
             CREATE: '/' + model + '/create',
+            CREATE_ENTRY: (layoutId) => { return '/' + model + '/create/layout/' + layoutId },
             // urls with extra params are functions, todo maybe do differently?
             EDIT: (id) => { return '/' + model + '/edit/' + id },
         }
@@ -380,13 +436,17 @@ export const Components = {
     },
     // todo possibly add specifics inputs here that share same componen
     input: {
-        text: TextField,
+        textfield: TextField,
         select: Dropdown,
+        multiselect: Grid, 
         checkbox: Checkbox,
         relation: Relation, 
         table: Table, 
-        grid: Grid, 
         formReference: FormReference, 
+    },
+    view: {
+        tags: Tags,
+        text: TextView
     }
 }
 
@@ -422,6 +482,7 @@ export const ModelRoutes = () => {
     return [
         { name: names.LIST, path: routes.LIST, component: c.list, props: true, meta: { action: actions.LIST } },
         { name: names.CREATE, path: routes.CREATE, component: c.item, props: true, meta: { action: actions.CREATE } },
+        { name: names.CREATE_ENTRY, path: routes.CREATE_ENTRY, component: c.item, props: true, meta: { action: actions.CREATE } },
         { name: names.EDIT, path: routes.EDIT, component: c.item, props: true, meta: { action: actions.EDIT } },
     ]
 }
@@ -433,6 +494,8 @@ export const ModelBreadcrumbs = (model, domain) => {
     return { 
         [names.LIST]:   [names.DOMAIN, names.LIST],
         [names.CREATE]: [names.DOMAIN, names.LIST, names.CREATE],
+        // todo add layout name in breadcrumbs
+        [names.CREATE_ENTRY]: [names.DOMAIN, names.LIST, names.CREATE_ENTRY],
         [names.EDIT]:   [names.DOMAIN, names.LIST, names.EDIT]
 
 
@@ -482,7 +545,7 @@ export const Breadcrumbs = MergeModelObjects(ModelBreadcrumbs)
 export const Notifications = { ...MergeModelObjects(ModelNotifications), 
     'failed': { type: 'is-danger', text: 'Oeps! Er ging iets mis' }
 }
-console.log(Notifications);
+// console.log(Notifications);
  
 
 // export const Breadcrumbs = {

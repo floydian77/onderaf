@@ -160,9 +160,12 @@ export const ModelActions = (model, domain) => {
             .catch((error) => handleError(dispatch, error))
         },
         [m.EDIT] ({ commit, dispatch }, item) {
-            console.log('item');
-            console.log(item);
+            // console.log('item');
+            // console.log(item);
             window.axios.put('/' + Urls.API + '/' + model + '/' + item.id, item).then((response) => {
+                // console.log('response');
+                // console.log(response);
+                
                 commit(m.EDIT, item)
                 dispatch(s.SET_NOTIFICATION, Notifications[m.EDITED])
                 // go to list view

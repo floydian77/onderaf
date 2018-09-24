@@ -8,12 +8,13 @@
                             <th v-for="(col, key) in prop.columns" :key="key">
                                 {{ col.label }}
                             </th>
+                            <th></th>
                         </tr>
                     </thead>
                 </slot>
                 <slot name="body">
                     <template v-if="item[propKey]">
-                        <tr v-for="(value, index) in values" :key="index">
+                        <tr v-for="(value, index) in values" v-if="!value.inactive" :key="index">
                             <td v-for="(col, key) in prop.columns" :key="key">
                                 <component  :item="value" 
                                             :prop="col" 
@@ -72,6 +73,8 @@
             },
             setValues() {
                 // todo should probably use vuex
+                // todo extract to class
+                // let row = { id, type, label, value } = this.values
                 this.item[this.propKey] = JSON.stringify(this.values)
             },
             // todo to computed
@@ -102,9 +105,13 @@
                 // .. new row
                 let obj = {
                     id: Math.max(...this.ids()) + 1,
+                    // todo get these from config, obviously
                     type: 'textfield',
                     label: '',
-                    value: '' 
+                    value: '',
+                    temp: {
+                        new: true
+                    }
                 }
                 
                 // for (let key in this.prop.columns) {
@@ -113,7 +120,13 @@
                 this.values.push(obj)
             },
             removeRow(index) {
+                let item = this.values[index]
+                    item.inactive = true
+
+                // change array to trigger watcher
+                // push to back of list
                 this.values.splice(index, 1)
+                this.values.splice(index, 0, item)
             },
         },
         computed: {

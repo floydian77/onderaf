@@ -19,6 +19,7 @@
 
 <script>
     import { Models, Texts, ModelLabels, NewModelItem, ModelEventNames, Components, Actions } from "../../../../config.js"
+    import { RemoveKeys } from "../../../../store/helpers.js"
     import TextField from "../form/inputs/Text.vue"
 
     export default {
@@ -54,15 +55,33 @@
             },
             editedItem() {
                 // deep clone
-                return JSON.parse(JSON.stringify(this.item))
+                return this.cloneObj(this.item)
             }
         },
         methods: {
+            // todo extrct
+            cloneObj(o) {
+                return JSON.parse(JSON.stringify(o))
+            },
             inputComponent(type) {
                 return Components.input[type]
             },
+            cleanItem(item) {
+                // todo extract
+                let keys = [
+                    'temp'
+                ]
+                // return JSON.stringify(RemoveKeys(JSON.parse(this.editedItem), keys))
+                // this.item = this.editedItem
+                RemoveKeys(item, keys)
+            },
             submit() {
-                this.$store.dispatch(ModelEventNames(this.modelName)[this.action], this.editedItem)
+                // this.cleanItem()
+                // todo is all this cloning good practise?
+                let item = this.cloneObj(this.editedItem)
+                this.cleanItem(item)
+
+                this.$store.dispatch(ModelEventNames(this.modelName)[this.action], item)
             }
         },
         components: {

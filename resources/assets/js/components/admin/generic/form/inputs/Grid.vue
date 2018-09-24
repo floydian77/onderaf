@@ -8,8 +8,8 @@
                 <template v-if="isRelation">
                     <span   v-for="(item, index) in prop.value" 
                             v-bind:key="index" 
-                            @click="toggleItem($event, item.id)" 
-                            v-bind:class="{ active: isActive(item.id) }"
+                            @click="toggleRelationItem($event, item.id)" 
+                            v-bind:class="{ active: isRelationActive(item.id) }"
                             class="tag clickable is-light">
                         {{ item.name }}
                     </span>
@@ -32,15 +32,17 @@
     export default {
         props: ['item', 'prop', 'propKey', 'isRelation', 'hideLabel'],
         created() {
-            // console.log('OTEM');
+            this.formatProps()
+            // console.log('GRID');
             // console.log(this.item);
             // console.log(this.prop);
             // console.log(this.propKey);
             // prop.value, item[propKey]
-            this.formatProps()
+            // this.formatProps()
         },
         computed: {
             currentValues() {
+                // return JSON.parse(this.item[this.propKey])
                 return this.item[this.propKey]
             },
             selected: {
@@ -66,8 +68,31 @@
                     this.prop.value = val.replace(/ /g,'').split(',')
                 }
             },
-            toggleItem(event, id) {
+            toggleItem(event, value) {
+                let list = event.target.classList
+                if (list.contains('active')) {
+                    for (let i = 0; i < this.currentValues.length; i++) {
+                        if (this.currentValues[i] == value) {
+                            this.currentValues.splice(i, 1)
+                            list.remove('active'); 
+                        }
+                    }
+                }
+                else {
+                    for (let i = 0; i < this.prop.value.length; i++) {
+                        if (this.prop.value[i] == value) {
+                            // list.remove('active'); 
+                            this.currentValues.push(this.prop.value[i])
+                            list.add('active');
+                        }
+                    }
+                }
+            },
+            toggleRelationItem(event, id) {
                 // add or remove item, from item[propKey]
+                // console.log('EVENT');
+                // console.log(event);
+                // console.log(id);
                 let list = event.target.classList
                 if (list.contains('active')) {
                     for (let i = 0; i < this.currentValues.length; i++) {
@@ -78,6 +103,9 @@
                     }
                 } 
                 else {
+                    console.log('currentValues');
+                    console.log(this.currentValues);
+                    
                     for (let i = 0; i < this.prop.value.length; i++) {
                         if (this.prop.value[i].id == id) {
                             // list.remove('active'); 
@@ -87,9 +115,17 @@
                     }
                 } 
             },
-            isActive(item) {
+            isActive(value) {
                 for (let i = 0; i < this.currentValues.length; i++) {
-                    if (this.currentValues[i].id == item) {
+                    if (this.currentValues[i] == value) {
+                        return true
+                    }
+                }
+                return false
+            },
+            isRelationActive(id) {
+                for (let i = 0; i < this.currentValues.length; i++) {
+                    if (this.currentValues[i].id == id) {
                         return true
                     }
                 }

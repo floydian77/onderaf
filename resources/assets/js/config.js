@@ -30,6 +30,7 @@ import Grid from './components/admin/generic/form/inputs/Grid.vue'
 import FormReference from './components/admin/generic/form/inputs/FormReference.vue'
 import Tags from './components/admin/generic/view/Tags.vue'
 import TextView from './components/admin/generic/view/Text.vue'
+import FormText from './components/admin/generic/form/views/Text.vue'
 
 
 // console.log(statics.TEST);
@@ -147,9 +148,10 @@ export const Models = {
                     'type': {
                         label: 'Type',
                         type: 'select',
-                        value: ['text', 'rich-text', 'textfield', 'select', 'checkbox'], 
+                        value: ['text', 'rich-text', 'textfield', 'select', 'multiselect', 'checkbox'], 
                         default: 0,
                         validation: {},
+                        editable: false
                     },
 
                 },
@@ -270,10 +272,16 @@ export const Texts = {
 //     validation: {},
 // },
 
+export const TypeDefaults = {
+    textfield: '',
+    checkbox: false,
+    multiselect: [],
+    relation: 1 
+}
+
 export function NewModelItem(model) {
     let properties = Models[model].properties
     let item = {}
-
     for (let propKey in properties) {
         let prop = properties[propKey]
         
@@ -289,6 +297,9 @@ export function NewModelItem(model) {
         if (prop.type == 'select') {
             item[propKey] = prop.value[prop.default]
         }
+        if (prop.type == 'multiselect') {
+            item[propKey] = []
+        }
         // formReference
         if (prop.type == 'formReference') {
             item.id = 1
@@ -297,10 +308,18 @@ export function NewModelItem(model) {
         // relation
         if (prop.type == 'relation') {
             // first relation is default
-            item[propKey] = 1
+            switch (prop.relation.type) {
+                case 'multiselect':
+                    item[propKey] = []
+                    break
+                case 'select':
+                    item[propKey] = 1
+                    break
+                default:
+                    item[propKey] = 1
+            }
         }
     }
-
     
     return item
 }
@@ -437,6 +456,7 @@ export const Components = {
     // todo possibly add specifics inputs here that share same componen
     input: {
         textfield: TextField,
+        text: FormText,
         select: Dropdown,
         multiselect: Grid, 
         checkbox: Checkbox,

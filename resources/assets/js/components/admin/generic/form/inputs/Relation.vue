@@ -16,18 +16,20 @@
                 components: Components
             }
         },
+        created() {
+        },
         computed: {
             loaded() {
                 return this.$store.getters.loaded[this.prop.relation.table]
             },
-            selected: {
-                get() {
-                    return this.item[this.propKey]
-                },
-                set(id) {
-                    this.item[this.propKey] = id
-                }
-            },
+            // selected: {
+            //     get() {
+            //         return this.item[this.propKey]
+            //     },
+            //     set(id) {
+            //         this.item[this.propKey] = id
+            //     }
+            // },
             relations() {
                 // todo validate property exists elsewhere
                 let relation = this.prop.relation.table 

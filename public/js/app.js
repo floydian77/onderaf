@@ -800,8 +800,9 @@ module.exports = {
 /* unused harmony export Domains */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return Models; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return Statics; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return Urls; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return Urls; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return Texts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return TypeDefaults; });
 /* harmony export (immutable) */ __webpack_exports__["m"] = NewModelItem;
 /* harmony export (immutable) */ __webpack_exports__["f"] = ModelEventNames;
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return ModelLabels; });
@@ -840,6 +841,8 @@ module.exports = {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_admin_generic_view_Tags_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_9__components_admin_generic_view_Tags_vue__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_admin_generic_view_Text_vue__ = __webpack_require__(138);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_admin_generic_view_Text_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_10__components_admin_generic_view_Text_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_admin_generic_form_views_Text_vue__ = __webpack_require__(193);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__components_admin_generic_form_views_Text_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_11__components_admin_generic_form_views_Text_vue__);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -864,6 +867,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 //     INITIATIVES: 'initiatives',
 //     ORGANISATIONS: 'organisations',
 // }
+
 
 
 
@@ -992,9 +996,10 @@ var Models = {
                     'type': {
                         label: 'Type',
                         type: 'select',
-                        value: ['text', 'rich-text', 'textfield', 'select', 'checkbox'],
+                        value: ['text', 'rich-text', 'textfield', 'select', 'multiselect', 'checkbox'],
                         default: 0,
-                        validation: {}
+                        validation: {},
+                        editable: false
                     }
 
                 },
@@ -1112,10 +1117,16 @@ var Texts = {
     //     validation: {},
     // },
 
-};function NewModelItem(model) {
+};var TypeDefaults = {
+    textfield: '',
+    checkbox: false,
+    multiselect: [],
+    relation: 1
+};
+
+function NewModelItem(model) {
     var properties = Models[model].properties;
     var item = {};
-
     for (var propKey in properties) {
         var prop = properties[propKey];
 
@@ -1131,6 +1142,9 @@ var Texts = {
         if (prop.type == 'select') {
             item[propKey] = prop.value[prop.default];
         }
+        if (prop.type == 'multiselect') {
+            item[propKey] = [];
+        }
         // formReference
         if (prop.type == 'formReference') {
             item.id = 1;
@@ -1139,7 +1153,16 @@ var Texts = {
         // relation
         if (prop.type == 'relation') {
             // first relation is default
-            item[propKey] = 1;
+            switch (prop.relation.type) {
+                case 'multiselect':
+                    item[propKey] = [];
+                    break;
+                case 'select':
+                    item[propKey] = 1;
+                    break;
+                default:
+                    item[propKey] = 1;
+            }
         }
     }
 
@@ -1274,6 +1297,7 @@ var Components = {
     // todo possibly add specifics inputs here that share same componen
     input: {
         textfield: __WEBPACK_IMPORTED_MODULE_2__components_admin_generic_form_inputs_Text_vue___default.a,
+        text: __WEBPACK_IMPORTED_MODULE_11__components_admin_generic_form_views_Text_vue___default.a,
         select: __WEBPACK_IMPORTED_MODULE_3__components_admin_generic_form_inputs_Dropdown_vue___default.a,
         multiselect: __WEBPACK_IMPORTED_MODULE_7__components_admin_generic_form_inputs_Grid_vue___default.a,
         checkbox: __WEBPACK_IMPORTED_MODULE_4__components_admin_generic_form_inputs_Checkbox_vue___default.a,
@@ -49015,7 +49039,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -49083,6 +49107,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
             var hasProperty = prop.listView && prop.listView.property;
             var value = this.item[key];
+            // console.log('vlaue')
+            // console.log(key)
+            // console.log(this.item)
+
 
             if (hasProperty) {
                 switch (type) {
@@ -49628,7 +49656,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -49640,8 +49668,9 @@ exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_js__ = __webpack_require__(4);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_inputs_Text_vue__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__form_inputs_Text_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__form_inputs_Text_vue__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__store_helpers_js__ = __webpack_require__(184);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__form_inputs_Text_vue__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__form_inputs_Text_vue___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__form_inputs_Text_vue__);
 //
 //
 //
@@ -49661,6 +49690,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+
 
 
 
@@ -49699,19 +49729,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         },
         editedItem: function editedItem() {
             // deep clone
-            return JSON.parse(JSON.stringify(this.item));
+            return this.cloneObj(this.item);
         }
     },
     methods: {
+        // todo extrct
+        cloneObj: function cloneObj(o) {
+            return JSON.parse(JSON.stringify(o));
+        },
         inputComponent: function inputComponent(type) {
             return __WEBPACK_IMPORTED_MODULE_0__config_js__["c" /* Components */].input[type];
         },
+        cleanItem: function cleanItem(item) {
+            // todo extract
+            var keys = ['temp'];
+            // return JSON.stringify(RemoveKeys(JSON.parse(this.editedItem), keys))
+            // this.item = this.editedItem
+            Object(__WEBPACK_IMPORTED_MODULE_1__store_helpers_js__["a" /* RemoveKeys */])(item, keys);
+        },
         submit: function submit() {
-            this.$store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_0__config_js__["f" /* ModelEventNames */])(this.modelName)[this.action], this.editedItem);
+            // this.cleanItem()
+            // todo is all this cloning good practise?
+            var item = this.cloneObj(this.editedItem);
+            this.cleanItem(item);
+
+            this.$store.dispatch(Object(__WEBPACK_IMPORTED_MODULE_0__config_js__["f" /* ModelEventNames */])(this.modelName)[this.action], item);
         }
     },
     components: {
-        TextField: __WEBPACK_IMPORTED_MODULE_1__form_inputs_Text_vue___default.a
+        TextField: __WEBPACK_IMPORTED_MODULE_2__form_inputs_Text_vue___default.a
     }
 });
 
@@ -49750,7 +49796,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -49772,12 +49818,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['item', 'prop', 'propKey', 'hideLabel'],
     created: function created() {
-        // console.log('text');
-        // console.log(this.item);
+        console.log('KU');
+        console.log(this.item);
         // console.log(this.propKey);
     },
 
@@ -49789,6 +49841,20 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             set: function set(val) {
                 this.item[this.propKey] = val;
             }
+        }
+    },
+    methods: {
+        shouldBeTextArea: function shouldBeTextArea() {
+            return this.item.type == 'text' && this.propKey == 'value';
+        },
+
+        // todo extract
+        editable: function editable() {
+            if (this.$route.meta.action == 'EDIT' && this.prop.editable === false && (!this.item.temp || !this.item.temp.new)) {
+
+                return false;
+            }
+            return true;
         }
     }
 });
@@ -49813,29 +49879,68 @@ var render = function() {
           ]
         : _vm._e(),
       _vm._v(" "),
-      _c("div", { staticClass: "control" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.value,
-              expression: "value"
-            }
-          ],
-          staticClass: "input is-small",
-          attrs: { placeholder: _vm.prop.placeholder, type: "text" },
-          domProps: { value: _vm.value },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.value = $event.target.value
-            }
-          }
-        })
-      ])
+      _c(
+        "div",
+        { staticClass: "control" },
+        [
+          _vm.shouldBeTextArea()
+            ? [
+                _c("textarea", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.value,
+                      expression: "value"
+                    }
+                  ],
+                  staticClass: "input is-small",
+                  attrs: {
+                    disabled: !_vm.editable(),
+                    placeholder: _vm.prop.placeholder,
+                    type: "text"
+                  },
+                  domProps: { value: _vm.value },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.value = $event.target.value
+                    }
+                  }
+                })
+              ]
+            : [
+                _c("input", {
+                  directives: [
+                    {
+                      name: "model",
+                      rawName: "v-model",
+                      value: _vm.value,
+                      expression: "value"
+                    }
+                  ],
+                  staticClass: "input is-small",
+                  attrs: {
+                    disabled: !_vm.editable(),
+                    placeholder: _vm.prop.placeholder,
+                    type: "text"
+                  },
+                  domProps: { value: _vm.value },
+                  on: {
+                    input: function($event) {
+                      if ($event.target.composing) {
+                        return
+                      }
+                      _vm.value = $event.target.value
+                    }
+                  }
+                })
+              ]
+        ],
+        2
+      )
     ],
     2
   )
@@ -49980,7 +50085,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -50027,29 +50132,44 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     // 
     props: ['item', 'prop', 'propKey', 'hideLabel', 'isRelation'],
     created: function created() {
-        console.log(this.item);
-        console.log(this.prop);
-        console.log(this.propKey);
+        // console.log(this.item);
+        // console.log(this.prop);
+        // console.log(this.propKey);
         this.formatProps();
+
+        if (!this.item[this.propKey]) {
+            this.item[this.propKey] = this.prop.value[this.prop.default || 0];
+        }
     },
 
     methods: {
+        // todo extract
+        editable: function editable() {
+            if (this.$route.meta.action == 'EDIT' && this.prop.editable === false && (!this.item.temp || !this.item.temp.new)) {
+
+                return false;
+            }
+            return true;
+        },
         formatProps: function formatProps() {
             var val = this.prop.value;
 
             // todo to config..
-            if (!this.prop.default) this.prop.default = 0;
+            // if (!this.prop.default) this.prop.default = 0
+            // let val = this.prop.value || this.prop.default || 0
 
             if (typeof val === 'string') {
                 // remove whitespace, string to array 
                 this.prop.value = val.replace(/ /g, '').split(',');
             }
+
+            // this.item[this.propKey] = val
         }
     },
     computed: {
         selected: {
             get: function get() {
-                return this.item[this.propKey] || this.prop.value[this.prop.default];
+                return this.item[this.propKey];
             },
             set: function set(val) {
                 this.item[this.propKey] = val;
@@ -50091,7 +50211,7 @@ var render = function() {
                   expression: "selected"
                 }
               ],
-              attrs: { disabled: _vm.prop.static },
+              attrs: { disabled: _vm.prop.static || !_vm.editable() },
               on: {
                 change: function($event) {
                   var $$selectedVal = Array.prototype.filter
@@ -50159,17 +50279,22 @@ if (false) {
 /* 112 */
 /***/ (function(module, exports, __webpack_require__) {
 
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(189)
+}
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = null
+var __vue_script__ = __webpack_require__(191)
 /* template */
-var __vue_template__ = null
+var __vue_template__ = __webpack_require__(192)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
-var __vue_styles__ = null
+var __vue_styles__ = injectStyle
 /* scopeId */
-var __vue_scopeId__ = null
+var __vue_scopeId__ = "data-v-097d4b4d"
 /* moduleIdentifier (server only) */
 var __vue_module_identifier__ = null
 var Component = normalizeComponent(
@@ -50181,6 +50306,22 @@ var Component = normalizeComponent(
   __vue_module_identifier__
 )
 Component.options.__file = "resources/assets/js/components/admin/generic/form/inputs/Checkbox.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-097d4b4d", Component.options)
+  } else {
+    hotAPI.reload("data-v-097d4b4d", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
 
 module.exports = Component.exports
 
@@ -50271,7 +50412,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -50303,20 +50444,21 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
             components: __WEBPACK_IMPORTED_MODULE_0__config_js__["c" /* Components */]
         };
     },
+    created: function created() {},
 
     computed: {
         loaded: function loaded() {
             return this.$store.getters.loaded[this.prop.relation.table];
         },
 
-        selected: {
-            get: function get() {
-                return this.item[this.propKey];
-            },
-            set: function set(id) {
-                this.item[this.propKey] = id;
-            }
-        },
+        // selected: {
+        //     get() {
+        //         return this.item[this.propKey]
+        //     },
+        //     set(id) {
+        //         this.item[this.propKey] = id
+        //     }
+        // },
         relations: function relations() {
             // todo validate property exists elsewhere
             var relation = this.prop.relation.table;
@@ -50444,7 +50586,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -50458,6 +50600,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_js__ = __webpack_require__(4);
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
+//
 //
 //
 //
@@ -50534,6 +50677,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         },
         setValues: function setValues() {
             // todo should probably use vuex
+            // todo extract to class
+            // let row = { id, type, label, value } = this.values
             this.item[this.propKey] = JSON.stringify(this.values);
         },
 
@@ -50586,9 +50731,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             // .. new row
             var obj = {
                 id: Math.max.apply(Math, _toConsumableArray(this.ids())) + 1,
+                // todo get these from config, obviously
                 type: 'textfield',
                 label: '',
-                value: ''
+                value: '',
+                temp: {
+                    new: true
+                }
 
                 // for (let key in this.prop.columns) {
                 //     let col = this.prop.columns[key]
@@ -50596,7 +50745,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
             };this.values.push(obj);
         },
         removeRow: function removeRow(index) {
+            var item = this.values[index];
+            item.inactive = true;
+
+            // change array to trigger watcher
+            // push to back of list
             this.values.splice(index, 1);
+            this.values.splice(index, 0, item);
         }
     },
     computed: {}
@@ -50623,15 +50778,20 @@ var render = function() {
                   _c("thead", [
                     _c(
                       "tr",
-                      _vm._l(_vm.prop.columns, function(col, key) {
-                        return _c("th", { key: key }, [
-                          _vm._v(
-                            "\n                            " +
-                              _vm._s(col.label) +
-                              "\n                        "
-                          )
-                        ])
-                      })
+                      [
+                        _vm._l(_vm.prop.columns, function(col, key) {
+                          return _c("th", { key: key }, [
+                            _vm._v(
+                              "\n                            " +
+                                _vm._s(col.label) +
+                                "\n                        "
+                            )
+                          ])
+                        }),
+                        _vm._v(" "),
+                        _c("th")
+                      ],
+                      2
                     )
                   ])
                 ]),
@@ -50639,73 +50799,75 @@ var render = function() {
                 _vm._t("body", [
                   _vm.item[_vm.propKey]
                     ? _vm._l(_vm.values, function(value, index) {
-                        return _c(
-                          "tr",
-                          { key: index },
-                          [
-                            _vm._l(_vm.prop.columns, function(col, key) {
-                              return _c(
-                                "td",
-                                { key: key },
-                                [
-                                  _c(_vm.components.input[col.type], {
-                                    tag: "component",
-                                    attrs: {
-                                      item: value,
-                                      prop: col,
-                                      propKey: key,
-                                      hideLabel: true
-                                    }
-                                  })
-                                ],
-                                1
-                              )
-                            }),
-                            _vm._v(" "),
-                            _vm.sortable
-                              ? [
-                                  _c("td", [
-                                    _c(
-                                      "button",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            _vm.indexUp(index)
-                                          }
+                        return !value.inactive
+                          ? _c(
+                              "tr",
+                              { key: index },
+                              [
+                                _vm._l(_vm.prop.columns, function(col, key) {
+                                  return _c(
+                                    "td",
+                                    { key: key },
+                                    [
+                                      _c(_vm.components.input[col.type], {
+                                        tag: "component",
+                                        attrs: {
+                                          item: value,
+                                          prop: col,
+                                          propKey: key,
+                                          hideLabel: true
                                         }
-                                      },
-                                      [_vm._v("Up")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "button",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            _vm.indexDown(index)
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Down")]
-                                    ),
-                                    _vm._v(" "),
-                                    _c(
-                                      "button",
-                                      {
-                                        on: {
-                                          click: function($event) {
-                                            _vm.removeRow(index)
-                                          }
-                                        }
-                                      },
-                                      [_vm._v("Remove field")]
-                                    )
-                                  ])
-                                ]
-                              : _vm._e()
-                          ],
-                          2
-                        )
+                                      })
+                                    ],
+                                    1
+                                  )
+                                }),
+                                _vm._v(" "),
+                                _vm.sortable
+                                  ? [
+                                      _c("td", [
+                                        _c(
+                                          "button",
+                                          {
+                                            on: {
+                                              click: function($event) {
+                                                _vm.indexUp(index)
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("Up")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "button",
+                                          {
+                                            on: {
+                                              click: function($event) {
+                                                _vm.indexDown(index)
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("Down")]
+                                        ),
+                                        _vm._v(" "),
+                                        _c(
+                                          "button",
+                                          {
+                                            on: {
+                                              click: function($event) {
+                                                _vm.removeRow(index)
+                                              }
+                                            }
+                                          },
+                                          [_vm._v("Remove field")]
+                                        )
+                                      ])
+                                    ]
+                                  : _vm._e()
+                              ],
+                              2
+                            )
+                          : _vm._e()
                       })
                     : _vm._e()
                 ])
@@ -50830,7 +50992,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -50875,16 +51037,18 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
     props: ['item', 'prop', 'propKey', 'isRelation', 'hideLabel'],
     created: function created() {
-        // console.log('OTEM');
+        this.formatProps();
+        // console.log('GRID');
         // console.log(this.item);
         // console.log(this.prop);
         // console.log(this.propKey);
         // prop.value, item[propKey]
-        this.formatProps();
+        // this.formatProps()
     },
 
     computed: {
         currentValues: function currentValues() {
+            // return JSON.parse(this.item[this.propKey])
             return this.item[this.propKey];
         },
 
@@ -50913,8 +51077,30 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                 this.prop.value = val.replace(/ /g, '').split(',');
             }
         },
-        toggleItem: function toggleItem(event, id) {
+        toggleItem: function toggleItem(event, value) {
+            var list = event.target.classList;
+            if (list.contains('active')) {
+                for (var i = 0; i < this.currentValues.length; i++) {
+                    if (this.currentValues[i] == value) {
+                        this.currentValues.splice(i, 1);
+                        list.remove('active');
+                    }
+                }
+            } else {
+                for (var _i = 0; _i < this.prop.value.length; _i++) {
+                    if (this.prop.value[_i] == value) {
+                        // list.remove('active'); 
+                        this.currentValues.push(this.prop.value[_i]);
+                        list.add('active');
+                    }
+                }
+            }
+        },
+        toggleRelationItem: function toggleRelationItem(event, id) {
             // add or remove item, from item[propKey]
+            // console.log('EVENT');
+            // console.log(event);
+            // console.log(id);
             var list = event.target.classList;
             if (list.contains('active')) {
                 for (var i = 0; i < this.currentValues.length; i++) {
@@ -50924,18 +51110,29 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
                     }
                 }
             } else {
-                for (var _i = 0; _i < this.prop.value.length; _i++) {
-                    if (this.prop.value[_i].id == id) {
+                console.log('currentValues');
+                console.log(this.currentValues);
+
+                for (var _i2 = 0; _i2 < this.prop.value.length; _i2++) {
+                    if (this.prop.value[_i2].id == id) {
                         // list.remove('active'); 
-                        this.currentValues.push(this.prop.value[_i]);
+                        this.currentValues.push(this.prop.value[_i2]);
                         list.add('active');
                     }
                 }
             }
         },
-        isActive: function isActive(item) {
+        isActive: function isActive(value) {
             for (var i = 0; i < this.currentValues.length; i++) {
-                if (this.currentValues[i].id == item) {
+                if (this.currentValues[i] == value) {
+                    return true;
+                }
+            }
+            return false;
+        },
+        isRelationActive: function isRelationActive(id) {
+            for (var i = 0; i < this.currentValues.length; i++) {
+                if (this.currentValues[i].id == id) {
                     return true;
                 }
             }
@@ -50976,10 +51173,10 @@ var render = function() {
                     {
                       key: index,
                       staticClass: "tag clickable is-light",
-                      class: { active: _vm.isActive(item.id) },
+                      class: { active: _vm.isRelationActive(item.id) },
                       on: {
                         click: function($event) {
-                          _vm.toggleItem($event, item.id)
+                          _vm.toggleRelationItem($event, item.id)
                         }
                       }
                     },
@@ -51118,7 +51315,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -51166,7 +51363,10 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         };
     },
     created: function created() {
+        // console.log('item')
+        // console.log(this.layout)
         this.formData = this.item[this.propKey].length ? JSON.parse(this.item[this.propKey]) : this.item[this.propKey];
+        // console.log(this.formData)
     },
 
     watch: {
@@ -51178,17 +51378,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }
     },
     methods: {
-        getFieldData: function getFieldData(id) {
+        getFieldData: function getFieldData(field) {
             if (this.formData.length) {
-                var data = this.formData.find(function (field) {
-                    return field.id === id;
+                var data = this.formData.find(function (item) {
+                    return item.id === field.id;
                 });
                 if (data) {
                     return data;
                 }
             }
-            this.formData.push({ id: id, value: '' });
-            return { id: id, value: '' };
+            this.formData.push({ id: field.id, value: __WEBPACK_IMPORTED_MODULE_0__config_js__["q" /* TypeDefaults */][field.type] });
+            return { id: field.id, value: __WEBPACK_IMPORTED_MODULE_0__config_js__["q" /* TypeDefaults */][field.type] };
         },
         formatField: function formatField(field) {
             if (!field.placeholder) field.placeholder = field.value;
@@ -51203,8 +51403,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     computed: {
         layout: function layout() {
-            var obj = this.$store.getters[Object(__WEBPACK_IMPORTED_MODULE_0__config_js__["f" /* ModelEventNames */])(this.prop.table).FIND](this.layoutId);
-            // console.log(JSON.parse(obj[this.propKey]));
+            var obj = this.$store.getters[Object(__WEBPACK_IMPORTED_MODULE_0__config_js__["f" /* ModelEventNames */])(this.prop.table).FIND](this.item.layout);
             return JSON.parse(obj[this.propKey]);
         },
         loaded: function loaded() {
@@ -51227,21 +51426,23 @@ var render = function() {
       ? _c(
           "div",
           _vm._l(_vm.layout, function(field, index) {
-            return _c(
-              "div",
-              { key: index },
-              [
-                _c(_vm.components.input[field.type], {
-                  tag: "component",
-                  attrs: {
-                    item: _vm.getFieldData(field.id),
-                    prop: _vm.formatField(field),
-                    propKey: "value"
-                  }
-                })
-              ],
-              1
-            )
+            return !field.inactive
+              ? _c(
+                  "div",
+                  { key: index },
+                  [
+                    _c(_vm.components.input[field.type], {
+                      tag: "component",
+                      attrs: {
+                        item: _vm.getFieldData(field),
+                        prop: _vm.formatField(field),
+                        propKey: "value"
+                      }
+                    })
+                  ],
+                  1
+                )
+              : _vm._e()
           })
         )
       : _vm._e()
@@ -54227,7 +54428,7 @@ exports = module.exports = __webpack_require__(1)(false);
 
 
 // module
-exports.push([module.i, "\nhtml, body {\n    background-color: #fff;\n    color: #636b6f;\n    /* font-family: 'Raleway', sans-serif; */\n    /* font-weight: 100; */\n    /* height: 100vh; */\n    height: 100%;\n    margin: 0;\n}\n\n  /* .full-height {\n    height: 100vh;\n}\n\n.flex-center {\n    align-items: center;\n    display: flex;\n    justify-content: center;\n}\n\n.position-ref {\n    position: relative;\n}\n\n.top-right {\n    position: absolute;\n    right: 10px;\n    top: 18px;\n}\n\n.content {\n    text-align: center;\n}\n\n.title {\n    font-size: 84px;\n}\n\n.links > a {\n    color: #636b6f;\n    padding: 0 25px;\n    font-size: 12px;\n    font-weight: 600;\n    letter-spacing: .1rem;\n    text-decoration: none;\n    text-transform: uppercase;\n}\n\n.m-b-md {\n    margin-bottom: 30px;\n} */\n\n\n  /* ---------------- */\n  /* Custom */\n  /* ---------------- */\n  /* todo make responsive */\n.container {\n      max-width: 700px;\n      width: 700px;\n}\n.field {\n      margin-bottom: 0.75rem;\n}\n\n  /* Menu todo not mobile responsive */\naside.column {\n      height: 100vh;\n      position: -webkit-sticky;\n      position: sticky;\n      top: 0;\n      left: 0;\n      /* z-index: 1; */\n      /* overflow-x: hidden; */\n}\n.menu {\n      width: 200px;\n}\n.column:first-child {\n      padding-left: 0.75rem !important;\n}\n.column:last-child {\n      padding-right: 0.75rem !important;\n}\n.columns.input-row > .column {\n      padding: 0.25rem;\n}\n.select {\n      width: 100%;\n}\n.select select {\n      margin-bottom: 0.5em;\n      width: 100%;\n}\n.tag.active {\n      background-color: paleturquoise !important;\n}\n.tag.clickable:hover {\n      cursor: pointer;\n      /* Darkens bgc */\n      -webkit-filter: brightness(95%);\n              filter: brightness(95%);\n}\n.tags.big .tag {\n      padding: 2rem;\n      font-weight: 500;\n}\ntable th > .button {\n      float: right;\n}\n", ""]);
+exports.push([module.i, "\nhtml, body {\n    background-color: #fff;\n    color: #636b6f;\n    /* font-family: 'Raleway', sans-serif; */\n    /* font-weight: 100; */\n    /* height: 100vh; */\n    height: 100%;\n    margin: 0;\n}\n\n  /* .full-height {\n    height: 100vh;\n}\n\n.flex-center {\n    align-items: center;\n    display: flex;\n    justify-content: center;\n}\n\n.position-ref {\n    position: relative;\n}\n\n.top-right {\n    position: absolute;\n    right: 10px;\n    top: 18px;\n}\n\n.content {\n    text-align: center;\n}\n\n.title {\n    font-size: 84px;\n}\n\n.links > a {\n    color: #636b6f;\n    padding: 0 25px;\n    font-size: 12px;\n    font-weight: 600;\n    letter-spacing: .1rem;\n    text-decoration: none;\n    text-transform: uppercase;\n}\n\n.m-b-md {\n    margin-bottom: 30px;\n} */\n\n\n  /* ---------------- */\n  /* Custom */\n  /* ---------------- */\n  /* todo make responsive */\n.container {\n      max-width: 700px;\n      width: 700px;\n}\n.field {\n      margin-bottom: 0.75rem;\n}\ntextarea {\n      resize: vertical\n}\n\n  /* Menu todo not mobile responsive */\naside.column {\n      height: 100vh;\n      position: -webkit-sticky;\n      position: sticky;\n      top: 0;\n      left: 0;\n      /* z-index: 1; */\n      /* overflow-x: hidden; */\n}\n.menu {\n      width: 200px;\n}\n.column:first-child {\n      padding-left: 0.75rem !important;\n}\n.column:last-child {\n      padding-right: 0.75rem !important;\n}\n.columns.input-row > .column {\n      padding: 0.25rem;\n}\n.select {\n      width: 100%;\n}\n.select select {\n      margin-bottom: 0.5em;\n      width: 100%;\n}\n.tag.active {\n      background-color: paleturquoise !important;\n}\n.tag.clickable:hover {\n      cursor: pointer;\n      /* Darkens bgc */\n      -webkit-filter: brightness(95%);\n              filter: brightness(95%);\n}\n.tags.big .tag {\n      padding: 2rem;\n      font-weight: 500;\n}\ntable th > .button {\n      float: right;\n}\n", ""]);
 
 // exports
 
@@ -54481,94 +54682,72 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
 
 // let { Notifications } = Config
 
-function FormLayout() {
-    var _ref = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        name = _ref.name,
-        type = _ref.type,
-        data = _ref.data,
-        placeholder = _ref.placeholder;
+// function FormLayout({ name, type, data, placeholder } = {}) {
+//     this.name = name;
+//     this.type = type;
+//     this.data = JSON.parse(data);
+//     this.placeholder = placeholder;
+// }
+// function FormEntry({ id, form_layout, data, initiative_id } = {}) {
+//     this.id = id;
+//     this.formLayout = form_layout;
+//     this.initiativeId = initiative_id;
+//     this.data = JSON.parse(data);
+// }
+// function Initiative({ id, name } = {}) {
+//     this.id = id;
+//     this.name = name;
+// }
+// function Category({ id, name } = {}) {
+//     this.id = id;
+//     this.name = name;
+// }
+// function Organisation({ id, name } = {}) {
+//     this.id = id;
+//     this.name = name;
+// }
 
-    this.name = name;
-    this.type = type;
-    this.data = JSON.parse(data);
-    this.placeholder = placeholder;
-}
-function FormEntry() {
-    var _ref2 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        id = _ref2.id,
-        form_layout = _ref2.form_layout,
-        data = _ref2.data,
-        initiative_id = _ref2.initiative_id;
+// function addFormLayout(state, layout) {
+//     state.forms.layouts.push(new FormLayout(layout))
+// }
 
-    this.id = id;
-    this.formLayout = form_layout;
-    this.initiativeId = initiative_id;
-    this.data = JSON.parse(data);
-}
-function Initiative() {
-    var _ref3 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        id = _ref3.id,
-        name = _ref3.name;
+// function addFormEntry(state, entry) {
+//     state.forms.entries.push(new FormEntry(entry))
+// }
 
-    this.id = id;
-    this.name = name;
-}
-function Category() {
-    var _ref4 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        id = _ref4.id,
-        name = _ref4.name;
+// function addInitiative(state, initiative) {
+//     state.groups.initiatives.push(new Initiative(initiative))
+// }
 
-    this.id = id;
-    this.name = name;
-}
-function Organisation() {
-    var _ref5 = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {},
-        id = _ref5.id,
-        name = _ref5.name;
+// function addCategory(state, category) {
+//     state.properties.categories.push(new Category(category))
+// }
+// function addOrganisation(state, organisation) {
+//     state.groups.organisations.push(new Organisation(organisation))
+// }
 
-    this.id = id;
-    this.name = name;
-}
-
-function addFormLayout(state, layout) {
-    state.forms.layouts.push(new FormLayout(layout));
-}
-
-function addFormEntry(state, entry) {
-    state.forms.entries.push(new FormEntry(entry));
-}
-
-function addInitiative(state, initiative) {
-    state.groups.initiatives.push(new Initiative(initiative));
-}
-
-function addCategory(state, category) {
-    state.properties.categories.push(new Category(category));
-}
-function addOrganisation(state, organisation) {
-    state.groups.organisations.push(new Organisation(organisation));
-}
 
 // set state
 
 
 // const store2 = new Vuex.Store({
+// todo extract to notifications module
 var store2 = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 
     // set state structure
-    state: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_3__helpers_js__["d" /* SetState */])(), {
+    state: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_3__helpers_js__["e" /* SetState */])(), {
         notifications: []
     }),
 
     // add getters
-    getters: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_3__helpers_js__["b" /* SetGetters */])(), {
+    getters: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_3__helpers_js__["c" /* SetGetters */])(), {
         notifications: function notifications(state) {
             return state.notifications;
         }
     }),
 
     // add mutations
-    mutations: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_3__helpers_js__["c" /* SetMutations */])(), {
+    mutations: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_3__helpers_js__["d" /* SetMutations */])(), {
         clearNotification: function clearNotification(state, index) {
             state.notifications.splice(index, 1);
         },
@@ -54578,12 +54757,12 @@ var store2 = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
     }),
 
     // add actions
-    actions: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_3__helpers_js__["a" /* SetActions */])(), {
-        fillFrontStore: function fillFrontStore(_ref6) {
-            var dispatch = _ref6.dispatch;
+    actions: _extends({}, Object(__WEBPACK_IMPORTED_MODULE_3__helpers_js__["b" /* SetActions */])(), {
+        fillFrontStore: function fillFrontStore(_ref) {
+            var dispatch = _ref.dispatch;
         },
-        fillBackStore: function fillBackStore(_ref7) {
-            var dispatch = _ref7.dispatch;
+        fillBackStore: function fillBackStore(_ref2) {
+            var dispatch = _ref2.dispatch;
 
             // todo do this in batches?
             dispatch('layoutsFill');
@@ -54592,9 +54771,9 @@ var store2 = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
             dispatch('categoriesFill');
             dispatch('organisationsFill');
         },
-        setNotification: function setNotification(_ref8, notification) {
-            var commit = _ref8.commit,
-                state = _ref8.state;
+        setNotification: function setNotification(_ref3, notification) {
+            var commit = _ref3.commit,
+                state = _ref3.state;
 
             commit('setNotification', notification);
 
@@ -54611,700 +54790,471 @@ var store2 = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
 // console.log(store2);
 
 
-var store = new __WEBPACK_IMPORTED_MODULE_1_vuex__["a" /* default */].Store({
-    state: {
-        forms: {
-            layouts: [],
-            entries: []
-        },
-        properties: {
-            categories: [],
-            conditions: []
-        },
-        groups: {
-            users: [],
-            initiatives: [],
-            organisations: []
-        },
-        loaded: {
-            layouts: false,
-            entries: false,
-            categories: false,
-            conditions: false,
-            users: false,
-            initiatives: false,
-            organisations: false
-        },
-        notifications: []
-    },
-    // todo move to form module
-    getters: {
-        loaded: function loaded(state) {
-            return state.loaded;
-        },
-        layouts: function layouts(state) {
-            return state.forms.layouts;
-        },
-        entries: function entries(state) {
-            return state.forms.entries;
-        },
-        categories: function categories(state) {
-            return state.properties.categories;
-        },
-        conditions: function conditions(state) {
-            return state.properties.conditions;
-        },
-        users: function users(state) {
-            return state.groups.users;
-        },
-        initiatives: function initiatives(state) {
-            return state.groups.initiatives;
-        },
-        organisations: function organisations(state) {
-            return state.groups.organisations;
-        },
-        notifications: function notifications(state) {
-            return state.notifications;
-        },
-        getLayout: function getLayout(state, getters) {
-            return function (name) {
-                return getters.layouts.find(function (layout) {
-                    return layout.name === name;
-                });
-            };
-        },
-        getEntry: function getEntry(state, getters) {
-            return function (id) {
-                return getters.entries.find(function (entry) {
-                    return entry.id == id;
-                });
-            };
-        },
-        getInitiative: function getInitiative(state, getters) {
-            return function (id) {
-                return getters.initiatives.find(function (initiative) {
-                    return initiative.id == id;
-                });
-            };
-        },
-        getCategory: function getCategory(state, getters) {
-            return function (id) {
-                return getters.categories.find(function (category) {
-                    return category.id == id;
-                });
-            };
-        },
-        getOrganisation: function getOrganisation(state, getters) {
-            return function (id) {
-                return getters.organisations.find(function (organisation) {
-                    return organisation.id == id;
-                });
-            };
-        }
-    },
-    mutations: {
-        // extract notification stuff to module
-        clearNotification: function clearNotification(state, index) {
-            state.notifications.splice(index, 1);
-        },
-        setNotification: function setNotification(state, payload) {
-            state.notifications.push({ type: payload.type, text: payload.text });
-        },
+// const store = new Vuex.Store({
+//     state: {
+//         forms: {
+//             layouts: [],
+//             entries: [] 
+//         },
+//         properties: {
+//             categories: [],
+//             conditions: []
+//         },
+//         groups: {
+//             users: [],
+//             initiatives: [],
+//             organisations: []
+//         },
+//         loaded: {
+//             layouts: false,
+//             entries: false,
+//             categories: false,
+//             conditions: false,
+//             users: false,
+//             initiatives: false,
+//             organisations: false,
+//         },
+//         notifications: []     
+//     },
+//     // todo move to form module
+//     getters: {
+//         loaded: state => state.loaded,
+//         layouts: state => state.forms.layouts,
+//         entries: state => state.forms.entries,
+//         categories: state => state.properties.categories,
+//         conditions: state => state.properties.conditions,
+//         users: state => state.groups.users,
+//         initiatives: state => state.groups.initiatives,
+//         organisations: state => state.groups.organisations,
+//         notifications: state => state.notifications,
+//         getLayout: (state, getters) => (name) => {
+//             return getters.layouts.find(layout => layout.name === name)
+//         },
+//         getEntry: (state, getters) => (id) => {
+//             return getters.entries.find(entry => entry.id == id)
+//         },
+//         getInitiative: (state, getters) => (id) => {
+//             return getters.initiatives.find(initiative => initiative.id == id)
+//         },
+//         getCategory: (state, getters) => (id) => {
+//             return getters.categories.find(category => category.id == id)
+//         },
+//         getOrganisation: (state, getters) => (id) => {
+//             return getters.organisations.find(organisation => organisation.id == id)
+//         },
+//     },
+//     mutations: {
+//         // extract notification stuff to module
+//         clearNotification(state, index) {
+//             state.notifications.splice(index, 1)
+//         },
+//         setNotification(state, payload) {
+//             state.notifications.push({ type: payload.type, text: payload.text })
+//         },
+//         // -----------------------
+//         // INITIATIVES
+//         // -----------------------
+//         // todo code is repeated everywhere
+//         getInitiatives (state, payload) {
+//             state.groups.initiatives = []
+//             for (let initiative of payload) {
+//                 addInitiative(state, initiative);
+//             }
+//             state.loaded.initiatives = true;
+//         },
+//         createInitiative (state, payload) {
+//             addInitiative(state, payload);
+//         },
+//         updateInitiative (state, payload) {
+//             let i = state.groups.initiatives.findIndex(initiative => initiative.id === payload.id);
+//             state.groups.initiatives[i] = { ...state.groups.initiatives[i], ...payload };
+//         },
+//         deleteInitiative (state, payload) {
+//             let i = state.groups.initiatives.findIndex(initiative => initiative.id === payload);
+//             state.groups.initiatives.splice(i, 1);
+//         },
+//         // -----------------------
+//         // LAYOUTS
+//         // -----------------------
+//         getLayouts (state, payload) {
+//             state.forms.layouts = []
+//             for (let layout of payload) {
+//                 addFormLayout(state, layout);
+//             }
+//             state.loaded.layouts = true;
+//         },
+//         createLayout (state, payload) {
+//             addFormLayout(state, payload);
+//         },
+//         updateLayout (state, payload) {
+//             let i = state.forms.layouts.findIndex(layout => layout.name === payload.name);
+//             state.forms.layouts[i] = { ...state.forms.layouts[i], ...payload };
+//         },
+//         deleteLayout (state, payload) {
+//             let i = state.forms.layouts.findIndex(layout => layout.name === payload);
+//             state.forms.layouts.splice(i, 1);
+//         },
+//         // -----------------------
+//         // ENTRIES
+//         // -----------------------
+//         getEntries (state, payload) {
+//             // todo add verification step here; filter properties, through class?
+//             state.forms.entries = []
+//             for (let entry of payload) {
+//                 addFormEntry(state, entry);
+//             }
+//             state.loaded.entries = true;
+//         },
+//         createEntry (state, payload) {
+//             addFormEntry(state, payload);
+//         },
+//         updateEntry (state, payload) {
+//             let i = state.forms.entries.findIndex(entry => entry.id === payload.id);
+//             // console.log(state);
+//             // console.log(payload);
+//             state.forms.entries[i] = { ...state.forms.entries[i], ...payload };
+//         },
+//         deleteEntry (state, payload) {
+//             let i = state.forms.entries.findIndex(entry => entry.id === payload);
+//             state.forms.entries.splice(i, 1);
+//         },
+//         // -----------------------
+//         // CATEGORIES
+//         // -----------------------
+//         getCategories (state, payload) {
+//             // todo add verification step here; filter properties, through class?
+//             state.properties.categories = []
+//             for (let category of payload) {
+//                 addCategory(state, category);
+//             }
+//             state.loaded.categories = true;
+//         },
+//         createCategory (state, payload) {
+//             addCategory(state, payload);
+//         },
+//         updateCategory (state, payload) {
+//             let i = state.properties.categories.findIndex(category => category.id === payload.id);
+//             state.properties.categories[i] = { ...state.properties.categories[i], ...payload };
+//         },
+//         deleteCategory (state, payload) {
+//             let i = state.properties.categories.findIndex(category => category.id === payload);
+//             state.properties.categories.splice(i, 1);
+//         },
+//         // -----------------------
+//         // ORGANISATIONS
+//         // -----------------------
+//         getOrganisations (state, payload) {
+//             // todo add verification step here; filter properties, through class?
+//             state.groups.organisations = []
+//             for (let organisation of payload) {
+//                 addOrganisation(state, organisation);
+//             }
+//             state.loaded.organisations = true;
+//         },
+//         createOrganisation (state, payload) {
+//             addOrganisation(state, payload);
+//         },
+//         updateOrganisation (state, payload) {
+//             let i = state.groups.organisations.findIndex(organisation => organisation.id === payload.id);
+//             state.groups.organisations[i] = { ...state.groups.organisations[i], ...payload };
+//         },
+//         deleteOrganisation (state, payload) {
+//             let i = state.groups.organisations.findIndex(organisation => organisation.id === payload);
+//             state.groups.organisations.splice(i, 1);
+//         }
+//     },  
+//     actions: {
+//         fillFrontStore({ dispatch }) {
+//         },
+//         fillBackStore({ dispatch }) {
+//             dispatch('getLayouts')
+//             dispatch('getEntries')
+//             dispatch('getInitiatives')
+//             dispatch('getCategories')
+//             dispatch('getOrganisations')
+//         },
+//         setNotification({ commit, state }, notification) {
+//             commit('setNotification', notification)
+
+//             // Show top of page
+//             window.scrollTo( 0, 0 );
+
+//             setTimeout(() => {
+//                 commit('clearNotification', 0)
+//             }, 4000)
+//         },
+//         // todo lots of duplicated code here
+//         // -----------------------
+//         // CATEGORIES
+//         // -----------------------
+//         getCategories({ commit, dispatch }) {
+//             window.axios.get('api/categories').then(({ data }) => {
+//                 commit('getCategories', data)
+//             })
+//             .catch(function (error) { 
+//                 console.log(error); 
+//                 dispatch('setNotification', Notifications['failed'])
+//             })
+//         },
+//         createCategory({ commit, dispatch }, category) {
+//             window.axios.post('/api/categories', category).then((response) => {
+//                 // todo add to database here, success and fail flags
+
+
+//                 commit('createCategory', category)
+//                 dispatch('setNotification', Notifications['category-added'])
+
+//             })
+//             .catch(function (error) { 
+//                 dispatch('setNotification', Notifications['failed'])
+//                 console.log(error);
+//             })
+//         },
+//         updateCategory({ commit, dispatch }, category) {
+//             // todo put this stringify in a verification / validation check?
+
+//             window.axios.put(`api/categories/${category.id}`, category).then((response) => {
+//                 // todo add to database here, success and fail flags
+
+//                 commit('updateCategory', category)
+//                 dispatch('setNotification', Notifications['category-updated'])
+//             })
+//             .catch(function (error) { 
+//                 console.log(error);
+//                 dispatch('setNotification', Notifications['failed'])
+//              })
+//         },
+//         removeCategory({ commit, dispatch }, id) {
+//             window.axios.delete(`/api/categories/${id}`).then((response) => {
+//                 // todo add to database here, success and fail flags
+//                 commit('deleteCategory', id)
+//                 dispatch('setNotification', Notifications['category-removed'])
+//             })
+//             .catch(function (error) { 
+//                 console.log(error);
+//                 dispatch('setNotification', Notifications['failed'])
+//             })
+//         },
+//         // -----------------------
+//         // INITIATIVES
+//         // -----------------------
+//         getInitiatives({ commit, dispatch }) {
+//             window.axios.get('api/initiatives').then(({ data }) => {
+//                 commit('getInitiatives', data)
+//             })
+//             .catch(function (error) { 
+//                 console.log(error); 
+//                 dispatch('setNotification', Notifications['failed'])
+//             })
+//         },
+//         createInitiative({ commit, dispatch }, initiative) {
+//             window.axios.post('/api/initiatives', initiative).then((response) => {
+//                 // todo add to database here, success and fail flags
+
+
+//                 commit('createInitiative', initiative)
+//                 dispatch('setNotification', Notifications['initiative-added'])
+//             })
+//             .catch(function (error) { 
+//                 dispatch('setNotification', Notifications['failed'])
+//                 console.log(error);
+//             })
+//         },
+//         updateInitiative({ commit, dispatch }, initiative) {
+//             // todo put this stringify in a verification / validation check?
+
+//             window.axios.put(`api/initiatives/${initiative.id}`, initiative).then((response) => {
+//                 // todo add to database here, success and fail flags
+
+//                 commit('updateInitiative', initiative)
+//                 dispatch('setNotification', Notifications['initiative-updated'])
+//             })
+//             .catch(function (error) { 
+//                 console.log(error);
+//                 dispatch('setNotification', Notifications['failed'])
+//              })
+//         },
+//         removeInitiative({ commit, dispatch }, id) {
+//             window.axios.delete(`/api/initiatives/${id}`).then((response) => {
+//                 // todo add to database here, success and fail flags
+//                 commit('deleteInitiative', id)
+//                 dispatch('setNotification', Notifications['initiative-removed'])
+//             })
+//             .catch(function (error) { 
+//                 console.log(error);
+//                 dispatch('setNotification', Notifications['failed'])
+//             })
+//         },
+//         // -----------------------
+//         // ORGANISATIONS
+//         // -----------------------
+//         getOrganisations({ commit, dispatch }) {
+//             window.axios.get('api/organisations').then(({ data }) => {
+//                 commit('getOrganisations', data)
+//             })
+//             .catch(function (error) { 
+//                 console.log(error); 
+//                 dispatch('setNotification', Notifications['failed'])
+//             })
+//         },
+//         createOrganisation({ commit, dispatch }, organisation) {
+//             window.axios.post('/api/organisations', organisation).then((response) => {
+//                 // todo add to database here, success and fail flags
+
+
+//                 commit('createOrganisation', organisation)
+//                 dispatch('setNotification', Notifications['organisation-added'])
+//             })
+//             .catch(function (error) { 
+//                 dispatch('setNotification', Notifications['failed'])
+//                 console.log(error);
+//             })
+//         },
+//         updateOrganisation({ commit, dispatch }, organisation) {
+//             // todo put this stringify in a verification / validation check?
+
+//             window.axios.put(`api/organisations/${organisation.id}`, organisation).then((response) => {
+//                 // todo add to database here, success and fail flags
+
+//                 commit('updateOrganisation', organisation)
+//                 dispatch('setNotification', Notifications['organisation-updated'])
+//             })
+//             .catch(function (error) { 
+//                 console.log(error);
+//                 dispatch('setNotification', Notifications['failed'])
+//              })
+//         },
+//         removeOrganisation({ commit, dispatch }, id) {
+//             window.axios.delete(`/api/organisations/${id}`).then((response) => {
+//                 // todo add to database here, success and fail flags
+//                 commit('deleteOrganisation', id)
+//                 dispatch('setNotification', Notifications['organisation-removed'])
+//             })
+//             .catch(function (error) { 
+//                 console.log(error);
+//                 dispatch('setNotification', Notifications['failed'])
+//             })
+//         },
+//         // -----------------------
+//         // LAYOUTS
+//         // -----------------------
+//         getLayouts({ commit, dispatch }) {
+//             window.axios.get('api/formLayouts').then(({ data }) => {
+//                 commit('getLayouts', data)
+//             })
+//             .catch(function (error) { 
+//                 console.log(error); 
+//                 dispatch('setNotification', Notifications['failed'])
+//             })
+//         },
+//         createLayout({ commit, dispatch }, layout) {
+//             let formatted = { ...layout };
+//             formatted.data = JSON.stringify(layout.data);
+
+//             window.axios.post('/api/formLayouts', formatted).then((response) => {
+//                 // todo add to database here, success and fail flags
+
+//                 commit('createLayout', formatted)
+//                 dispatch('setNotification', Notifications['form-layout-added'])
+//             })
+//             .catch(function (error) { 
+//                 dispatch('setNotification', Notifications['failed'])
+//                 console.log(error);
+//             })
+//         },
+//         updateLayout({ commit, dispatch }, layout) {
+//             // todo put this stringify in a verification / validation check?
+//             let formatted = { ...layout };
+//             formatted.data = JSON.stringify(layout.data);
+
+//             // todo use oldname here if name is changeable
+//             window.axios.put(`api/formLayouts/${layout.name}`, formatted).then((response) => {
+//                 // todo add to database here, success and fail flags
+
+//                 commit('updateLayout', layout)
+//                 dispatch('setNotification', Notifications['form-layout-updated'])
+//             })
+//             .catch(function (error) { 
+//                 console.log(error);
+//                 dispatch('setNotification', Notifications['failed'])
+//              })
+//         },
+//         removeLayout({ commit, dispatch }, name) {
+//             window.axios.delete(`/api/formLayouts/${name}`).then((response) => {
+//                 // todo add to database here, success and fail flags
+//                 commit('deleteLayout', name)
+//                 dispatch('setNotification', Notifications['form-layout-removed'])
+//             })
+//             .catch(function (error) { 
+//                 console.log(error);
+//                 dispatch('setNotification', Notifications['failed'])
+//             })
+//         },
+//         // -----------------------
+//         // ENTRIES
+//         // -----------------------
+//         getEntries({ commit, dispatch }) {
+//             window.axios.get('api/formEntries').then((response) => {
+//                 // console.log(response.data)
+//                 commit('getEntries', response.data)
+//             })
+//             .catch(function (error) { 
+//                 console.log(error); 
+//                 dispatch('setNotification', Notifications['failed'])
+//             })
+//         },
+//         createEntry({ commit, dispatch }, entry) {
+//             let formatted = { ...entry };
+//             formatted.data = JSON.stringify(entry.data);
+
+//             window.axios.post('/api/formEntries', formatted).then((response) => {
+//                 // todo add to database here, success and fail flags
+
+//                 // id from server
+//                 formatted.id = response.data.id;
+//                 // todo sloppy, just use snake case (_)
+//                 formatted.form_layout = formatted.formLayout
+//                 formatted.initiative_id = formatted.initiativeId
+
+
+//                 commit('createEntry', formatted)
+//                 dispatch('setNotification', Notifications['form-entry-added'])
+//             })
+//             .catch(function (error) { 
+//                 dispatch('setNotification', Notifications['failed'])
+//                 console.log(error); 
+//             })
+//         },
+//         updateEntry({ commit, dispatch }, entry) {
+//             // todo put this stringify in a verification / validation check?
+//             let formatted = { ...entry };
+//             formatted.data = JSON.stringify(entry.data);
+
+//             window.axios.put(`api/formEntries/${entry.id}`, formatted).then((response) => {
+//                 // todo add to database here, success and fail flags
+//                 commit('updateEntry', entry)
+//                 dispatch('setNotification', Notifications['form-entry-updated'])
+//                 // console.log(response);
+//             })
+//             .catch(function (error) { 
+//                 dispatch('setNotification', Notifications['failed'])
+//                 console.log(error); 
+//             })
+//         },
+//         removeEntry({ commit, dispatch }, id) {
+//             window.axios.delete(`/api/formEntries/${id}`).then((response) => {
+//                 // todo add to database here, success and fail flags
+//                 commit('deleteEntry', id)
+//                 dispatch('setNotification', Notifications['form-entry-removed'])
+//             })
+//             .catch(function (error) { 
+//                 dispatch('setNotification', Notifications['failed'])
+//                 console.log(error); 
+//             })
+//         },
+//     }
+// })
 
-        // -----------------------
-        // INITIATIVES
-        // -----------------------
-        // todo code is repeated everywhere
-        getInitiatives: function getInitiatives(state, payload) {
-            state.groups.initiatives = [];
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
-
-            try {
-                for (var _iterator = payload[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
-                    var initiative = _step.value;
-
-                    addInitiative(state, initiative);
-                }
-            } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
-                    }
-                } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
-                    }
-                }
-            }
-
-            state.loaded.initiatives = true;
-        },
-        createInitiative: function createInitiative(state, payload) {
-            addInitiative(state, payload);
-        },
-        updateInitiative: function updateInitiative(state, payload) {
-            var i = state.groups.initiatives.findIndex(function (initiative) {
-                return initiative.id === payload.id;
-            });
-            state.groups.initiatives[i] = _extends({}, state.groups.initiatives[i], payload);
-        },
-        deleteInitiative: function deleteInitiative(state, payload) {
-            var i = state.groups.initiatives.findIndex(function (initiative) {
-                return initiative.id === payload;
-            });
-            state.groups.initiatives.splice(i, 1);
-        },
-
-        // -----------------------
-        // LAYOUTS
-        // -----------------------
-        getLayouts: function getLayouts(state, payload) {
-            state.forms.layouts = [];
-            var _iteratorNormalCompletion2 = true;
-            var _didIteratorError2 = false;
-            var _iteratorError2 = undefined;
-
-            try {
-                for (var _iterator2 = payload[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                    var layout = _step2.value;
-
-                    addFormLayout(state, layout);
-                }
-            } catch (err) {
-                _didIteratorError2 = true;
-                _iteratorError2 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                        _iterator2.return();
-                    }
-                } finally {
-                    if (_didIteratorError2) {
-                        throw _iteratorError2;
-                    }
-                }
-            }
-
-            state.loaded.layouts = true;
-        },
-        createLayout: function createLayout(state, payload) {
-            addFormLayout(state, payload);
-        },
-        updateLayout: function updateLayout(state, payload) {
-            var i = state.forms.layouts.findIndex(function (layout) {
-                return layout.name === payload.name;
-            });
-            state.forms.layouts[i] = _extends({}, state.forms.layouts[i], payload);
-        },
-        deleteLayout: function deleteLayout(state, payload) {
-            var i = state.forms.layouts.findIndex(function (layout) {
-                return layout.name === payload;
-            });
-            state.forms.layouts.splice(i, 1);
-        },
-
-        // -----------------------
-        // ENTRIES
-        // -----------------------
-        getEntries: function getEntries(state, payload) {
-            // todo add verification step here; filter properties, through class?
-            state.forms.entries = [];
-            var _iteratorNormalCompletion3 = true;
-            var _didIteratorError3 = false;
-            var _iteratorError3 = undefined;
-
-            try {
-                for (var _iterator3 = payload[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
-                    var entry = _step3.value;
-
-                    addFormEntry(state, entry);
-                }
-            } catch (err) {
-                _didIteratorError3 = true;
-                _iteratorError3 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                        _iterator3.return();
-                    }
-                } finally {
-                    if (_didIteratorError3) {
-                        throw _iteratorError3;
-                    }
-                }
-            }
-
-            state.loaded.entries = true;
-        },
-        createEntry: function createEntry(state, payload) {
-            addFormEntry(state, payload);
-        },
-        updateEntry: function updateEntry(state, payload) {
-            var i = state.forms.entries.findIndex(function (entry) {
-                return entry.id === payload.id;
-            });
-            // console.log(state);
-            // console.log(payload);
-            state.forms.entries[i] = _extends({}, state.forms.entries[i], payload);
-        },
-        deleteEntry: function deleteEntry(state, payload) {
-            var i = state.forms.entries.findIndex(function (entry) {
-                return entry.id === payload;
-            });
-            state.forms.entries.splice(i, 1);
-        },
-
-        // -----------------------
-        // CATEGORIES
-        // -----------------------
-        getCategories: function getCategories(state, payload) {
-            // todo add verification step here; filter properties, through class?
-            state.properties.categories = [];
-            var _iteratorNormalCompletion4 = true;
-            var _didIteratorError4 = false;
-            var _iteratorError4 = undefined;
-
-            try {
-                for (var _iterator4 = payload[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
-                    var category = _step4.value;
-
-                    addCategory(state, category);
-                }
-            } catch (err) {
-                _didIteratorError4 = true;
-                _iteratorError4 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                        _iterator4.return();
-                    }
-                } finally {
-                    if (_didIteratorError4) {
-                        throw _iteratorError4;
-                    }
-                }
-            }
-
-            state.loaded.categories = true;
-        },
-        createCategory: function createCategory(state, payload) {
-            addCategory(state, payload);
-        },
-        updateCategory: function updateCategory(state, payload) {
-            var i = state.properties.categories.findIndex(function (category) {
-                return category.id === payload.id;
-            });
-            state.properties.categories[i] = _extends({}, state.properties.categories[i], payload);
-        },
-        deleteCategory: function deleteCategory(state, payload) {
-            var i = state.properties.categories.findIndex(function (category) {
-                return category.id === payload;
-            });
-            state.properties.categories.splice(i, 1);
-        },
-
-        // -----------------------
-        // ORGANISATIONS
-        // -----------------------
-        getOrganisations: function getOrganisations(state, payload) {
-            // todo add verification step here; filter properties, through class?
-            state.groups.organisations = [];
-            var _iteratorNormalCompletion5 = true;
-            var _didIteratorError5 = false;
-            var _iteratorError5 = undefined;
-
-            try {
-                for (var _iterator5 = payload[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                    var organisation = _step5.value;
-
-                    addOrganisation(state, organisation);
-                }
-            } catch (err) {
-                _didIteratorError5 = true;
-                _iteratorError5 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion5 && _iterator5.return) {
-                        _iterator5.return();
-                    }
-                } finally {
-                    if (_didIteratorError5) {
-                        throw _iteratorError5;
-                    }
-                }
-            }
-
-            state.loaded.organisations = true;
-        },
-        createOrganisation: function createOrganisation(state, payload) {
-            addOrganisation(state, payload);
-        },
-        updateOrganisation: function updateOrganisation(state, payload) {
-            var i = state.groups.organisations.findIndex(function (organisation) {
-                return organisation.id === payload.id;
-            });
-            state.groups.organisations[i] = _extends({}, state.groups.organisations[i], payload);
-        },
-        deleteOrganisation: function deleteOrganisation(state, payload) {
-            var i = state.groups.organisations.findIndex(function (organisation) {
-                return organisation.id === payload;
-            });
-            state.groups.organisations.splice(i, 1);
-        }
-    },
-    actions: {
-        fillFrontStore: function fillFrontStore(_ref9) {
-            var dispatch = _ref9.dispatch;
-        },
-        fillBackStore: function fillBackStore(_ref10) {
-            var dispatch = _ref10.dispatch;
-
-            dispatch('getLayouts');
-            dispatch('getEntries');
-            dispatch('getInitiatives');
-            dispatch('getCategories');
-            dispatch('getOrganisations');
-        },
-        setNotification: function setNotification(_ref11, notification) {
-            var commit = _ref11.commit,
-                state = _ref11.state;
-
-            commit('setNotification', notification);
-
-            // Show top of page
-            window.scrollTo(0, 0);
-
-            setTimeout(function () {
-                commit('clearNotification', 0);
-            }, 4000);
-        },
-
-        // todo lots of duplicated code here
-        // -----------------------
-        // CATEGORIES
-        // -----------------------
-        getCategories: function getCategories(_ref12) {
-            var commit = _ref12.commit,
-                dispatch = _ref12.dispatch;
-
-            window.axios.get('api/categories').then(function (_ref13) {
-                var data = _ref13.data;
-
-                commit('getCategories', data);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-        createCategory: function createCategory(_ref14, category) {
-            var commit = _ref14.commit,
-                dispatch = _ref14.dispatch;
-
-            window.axios.post('/api/categories', category).then(function (response) {
-                // todo add to database here, success and fail flags
-
-
-                commit('createCategory', category);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['category-added']);
-            }).catch(function (error) {
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-                console.log(error);
-            });
-        },
-        updateCategory: function updateCategory(_ref15, category) {
-            var commit = _ref15.commit,
-                dispatch = _ref15.dispatch;
-
-            // todo put this stringify in a verification / validation check?
-
-            window.axios.put('api/categories/' + category.id, category).then(function (response) {
-                // todo add to database here, success and fail flags
-
-                commit('updateCategory', category);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['category-updated']);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-        removeCategory: function removeCategory(_ref16, id) {
-            var commit = _ref16.commit,
-                dispatch = _ref16.dispatch;
-
-            window.axios.delete('/api/categories/' + id).then(function (response) {
-                // todo add to database here, success and fail flags
-                commit('deleteCategory', id);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['category-removed']);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-
-        // -----------------------
-        // INITIATIVES
-        // -----------------------
-        getInitiatives: function getInitiatives(_ref17) {
-            var commit = _ref17.commit,
-                dispatch = _ref17.dispatch;
-
-            window.axios.get('api/initiatives').then(function (_ref18) {
-                var data = _ref18.data;
-
-                commit('getInitiatives', data);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-        createInitiative: function createInitiative(_ref19, initiative) {
-            var commit = _ref19.commit,
-                dispatch = _ref19.dispatch;
-
-            window.axios.post('/api/initiatives', initiative).then(function (response) {
-                // todo add to database here, success and fail flags
-
-
-                commit('createInitiative', initiative);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['initiative-added']);
-            }).catch(function (error) {
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-                console.log(error);
-            });
-        },
-        updateInitiative: function updateInitiative(_ref20, initiative) {
-            var commit = _ref20.commit,
-                dispatch = _ref20.dispatch;
-
-            // todo put this stringify in a verification / validation check?
-
-            window.axios.put('api/initiatives/' + initiative.id, initiative).then(function (response) {
-                // todo add to database here, success and fail flags
-
-                commit('updateInitiative', initiative);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['initiative-updated']);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-        removeInitiative: function removeInitiative(_ref21, id) {
-            var commit = _ref21.commit,
-                dispatch = _ref21.dispatch;
-
-            window.axios.delete('/api/initiatives/' + id).then(function (response) {
-                // todo add to database here, success and fail flags
-                commit('deleteInitiative', id);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['initiative-removed']);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-
-        // -----------------------
-        // ORGANISATIONS
-        // -----------------------
-        getOrganisations: function getOrganisations(_ref22) {
-            var commit = _ref22.commit,
-                dispatch = _ref22.dispatch;
-
-            window.axios.get('api/organisations').then(function (_ref23) {
-                var data = _ref23.data;
-
-                commit('getOrganisations', data);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-        createOrganisation: function createOrganisation(_ref24, organisation) {
-            var commit = _ref24.commit,
-                dispatch = _ref24.dispatch;
-
-            window.axios.post('/api/organisations', organisation).then(function (response) {
-                // todo add to database here, success and fail flags
-
-
-                commit('createOrganisation', organisation);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['organisation-added']);
-            }).catch(function (error) {
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-                console.log(error);
-            });
-        },
-        updateOrganisation: function updateOrganisation(_ref25, organisation) {
-            var commit = _ref25.commit,
-                dispatch = _ref25.dispatch;
-
-            // todo put this stringify in a verification / validation check?
-
-            window.axios.put('api/organisations/' + organisation.id, organisation).then(function (response) {
-                // todo add to database here, success and fail flags
-
-                commit('updateOrganisation', organisation);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['organisation-updated']);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-        removeOrganisation: function removeOrganisation(_ref26, id) {
-            var commit = _ref26.commit,
-                dispatch = _ref26.dispatch;
-
-            window.axios.delete('/api/organisations/' + id).then(function (response) {
-                // todo add to database here, success and fail flags
-                commit('deleteOrganisation', id);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['organisation-removed']);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-
-        // -----------------------
-        // LAYOUTS
-        // -----------------------
-        getLayouts: function getLayouts(_ref27) {
-            var commit = _ref27.commit,
-                dispatch = _ref27.dispatch;
-
-            window.axios.get('api/formLayouts').then(function (_ref28) {
-                var data = _ref28.data;
-
-                commit('getLayouts', data);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-        createLayout: function createLayout(_ref29, layout) {
-            var commit = _ref29.commit,
-                dispatch = _ref29.dispatch;
-
-            var formatted = _extends({}, layout);
-            formatted.data = JSON.stringify(layout.data);
-
-            window.axios.post('/api/formLayouts', formatted).then(function (response) {
-                // todo add to database here, success and fail flags
-
-                commit('createLayout', formatted);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['form-layout-added']);
-            }).catch(function (error) {
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-                console.log(error);
-            });
-        },
-        updateLayout: function updateLayout(_ref30, layout) {
-            var commit = _ref30.commit,
-                dispatch = _ref30.dispatch;
-
-            // todo put this stringify in a verification / validation check?
-            var formatted = _extends({}, layout);
-            formatted.data = JSON.stringify(layout.data);
-
-            // todo use oldname here if name is changeable
-            window.axios.put('api/formLayouts/' + layout.name, formatted).then(function (response) {
-                // todo add to database here, success and fail flags
-
-                commit('updateLayout', layout);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['form-layout-updated']);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-        removeLayout: function removeLayout(_ref31, name) {
-            var commit = _ref31.commit,
-                dispatch = _ref31.dispatch;
-
-            window.axios.delete('/api/formLayouts/' + name).then(function (response) {
-                // todo add to database here, success and fail flags
-                commit('deleteLayout', name);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['form-layout-removed']);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-
-        // -----------------------
-        // ENTRIES
-        // -----------------------
-        getEntries: function getEntries(_ref32) {
-            var commit = _ref32.commit,
-                dispatch = _ref32.dispatch;
-
-            window.axios.get('api/formEntries').then(function (response) {
-                // console.log(response.data)
-                commit('getEntries', response.data);
-            }).catch(function (error) {
-                console.log(error);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-            });
-        },
-        createEntry: function createEntry(_ref33, entry) {
-            var commit = _ref33.commit,
-                dispatch = _ref33.dispatch;
-
-            var formatted = _extends({}, entry);
-            formatted.data = JSON.stringify(entry.data);
-
-            window.axios.post('/api/formEntries', formatted).then(function (response) {
-                // todo add to database here, success and fail flags
-
-                // id from server
-                formatted.id = response.data.id;
-                // todo sloppy, just use snake case (_)
-                formatted.form_layout = formatted.formLayout;
-                formatted.initiative_id = formatted.initiativeId;
-
-                commit('createEntry', formatted);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['form-entry-added']);
-            }).catch(function (error) {
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-                console.log(error);
-            });
-        },
-        updateEntry: function updateEntry(_ref34, entry) {
-            var commit = _ref34.commit,
-                dispatch = _ref34.dispatch;
-
-            // todo put this stringify in a verification / validation check?
-            var formatted = _extends({}, entry);
-            formatted.data = JSON.stringify(entry.data);
-
-            window.axios.put('api/formEntries/' + entry.id, formatted).then(function (response) {
-                // todo add to database here, success and fail flags
-                commit('updateEntry', entry);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['form-entry-updated']);
-                // console.log(response);
-            }).catch(function (error) {
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-                console.log(error);
-            });
-        },
-        removeEntry: function removeEntry(_ref35, id) {
-            var commit = _ref35.commit,
-                dispatch = _ref35.dispatch;
-
-            window.axios.delete('/api/formEntries/' + id).then(function (response) {
-                // todo add to database here, success and fail flags
-                commit('deleteEntry', id);
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['form-entry-removed']);
-            }).catch(function (error) {
-                dispatch('setNotification', __WEBPACK_IMPORTED_MODULE_2__config_js__["n" /* Notifications */]['failed']);
-                console.log(error);
-            });
-        }
-    }
-});
 
 /* harmony default export */ __webpack_exports__["a"] = (store2);
 
@@ -56258,16 +56208,19 @@ var index_esm = {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return SetState; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return SetGetters; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return SetMutations; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return SetActions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return RemoveKeys; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return SetState; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return SetGetters; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return SetMutations; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return SetActions; });
 /* unused harmony export ModelGetters */
 /* unused harmony export ModelMutations */
 /* unused harmony export ModelActions */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config_js__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__routes_js__ = __webpack_require__(14);
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
@@ -56301,7 +56254,7 @@ function handleError(dispatch, error) {
     var message = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'failed';
 
     console.log(error);
-    dispatch(s.SET_NOTIFICATION, __WEBPACK_IMPORTED_MODULE_0__config_js__["n" /* Notifications */][message]);
+    dispatch(__WEBPACK_IMPORTED_MODULE_0__config_js__["o" /* Statics */].SET_NOTIFICATION, __WEBPACK_IMPORTED_MODULE_0__config_js__["n" /* Notifications */][message]);
 }
 
 // not used
@@ -56312,6 +56265,58 @@ function handleError(dispatch, error) {
 // export const ModelLoadedState = (model) => { 
 //     return { [model]: false }
 // }
+function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+// todo absolutely disgusting
+var RemoveKeys = function RemoveKeys(obj, keys) {
+    var index;
+
+    for (var prop in obj) {
+        // important check that this is objects own property
+        // not from prototype prop inherited
+
+        if (obj.hasOwnProperty(prop)) {
+            switch (_typeof(obj[prop])) {
+                case 'string':
+                    if (IsJsonString(obj[prop])) {
+                        index = keys.indexOf(prop);
+                        if (index > -1) {
+                            delete obj[prop];
+                        } else {
+                            obj[prop] = JSON.stringify(RemoveKeys(JSON.parse(obj[prop]), keys));
+                        }
+                    } else {
+                        index = keys.indexOf(prop);
+                        if (index > -1) {
+                            delete obj[prop];
+                        }
+                    }
+                    break;
+                case 'object':
+                    index = keys.indexOf(prop);
+                    if (index > -1) {
+                        delete obj[prop];
+                    } else {
+                        RemoveKeys(obj[prop], keys);
+                    }
+                    break;
+            }
+        }
+    }
+    return obj;
+};
+
+function cleanItem(item) {
+    var keys = ['temp'];
+    return RemoveKeys(item, keys);
+}
 
 var SetState = function SetState() {
     var state = {};
@@ -56429,7 +56434,7 @@ var ModelActions = function ModelActions(model, domain) {
         var commit = _ref3.commit,
             dispatch = _ref3.dispatch;
 
-        window.axios.get('/' + __WEBPACK_IMPORTED_MODULE_0__config_js__["q" /* Urls */].API + '/' + model).then(function (_ref4) {
+        window.axios.get('/' + __WEBPACK_IMPORTED_MODULE_0__config_js__["r" /* Urls */].API + '/' + model).then(function (_ref4) {
             var data = _ref4.data;
 
             commit(m.FILL, data);
@@ -56440,9 +56445,13 @@ var ModelActions = function ModelActions(model, domain) {
         var commit = _ref5.commit,
             dispatch = _ref5.dispatch;
 
-        window.axios.post('/' + __WEBPACK_IMPORTED_MODULE_0__config_js__["q" /* Urls */].API + '/' + model, item).then(function (response) {
+        window.axios.post('/' + __WEBPACK_IMPORTED_MODULE_0__config_js__["r" /* Urls */].API + '/' + model, item).then(function (response) {
+            // console.log('response');
+            // console.log(response);
+            item.id = response.data.id;
             // todo add to database here, success and fail flags
-            commit(m.CREATE, response.data);
+            // RemoveKeys(item, ['temp'])
+            commit(m.CREATE, item);
             dispatch(s.SET_NOTIFICATION, __WEBPACK_IMPORTED_MODULE_0__config_js__["n" /* Notifications */][m.CREATED]);
             // go to list view
             __WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Router */].push({
@@ -56456,14 +56465,9 @@ var ModelActions = function ModelActions(model, domain) {
         var commit = _ref6.commit,
             dispatch = _ref6.dispatch;
 
-        // console.log('item');
-        // console.log(item);
-        window.axios.put('/' + __WEBPACK_IMPORTED_MODULE_0__config_js__["q" /* Urls */].API + '/' + model + '/' + item.id, item).then(function (response) {
-            // console.log('response');
-            // console.log(response);
-
+        window.axios.put('/' + __WEBPACK_IMPORTED_MODULE_0__config_js__["r" /* Urls */].API + '/' + model + '/' + item.id, item).then(function (response) {
             commit(m.EDIT, item);
-            dispatch(s.SET_NOTIFICATION, __WEBPACK_IMPORTED_MODULE_0__config_js__["n" /* Notifications */][m.EDITED]);
+            dispatch(__WEBPACK_IMPORTED_MODULE_0__config_js__["o" /* Statics */].SET_NOTIFICATION, __WEBPACK_IMPORTED_MODULE_0__config_js__["n" /* Notifications */][m.EDITED]);
             // go to list view
             __WEBPACK_IMPORTED_MODULE_1__routes_js__["a" /* Router */].push({
                 name: Object(__WEBPACK_IMPORTED_MODULE_0__config_js__["j" /* ModelRoutesAndNames */])().names.LIST,
@@ -56476,7 +56480,7 @@ var ModelActions = function ModelActions(model, domain) {
         var commit = _ref7.commit,
             dispatch = _ref7.dispatch;
 
-        window.axios.delete('/' + __WEBPACK_IMPORTED_MODULE_0__config_js__["q" /* Urls */].API + '/' + model + '/' + id).then(function (response) {
+        window.axios.delete('/' + __WEBPACK_IMPORTED_MODULE_0__config_js__["r" /* Urls */].API + '/' + model + '/' + id).then(function (response) {
             commit(m.REMOVE, id);
             dispatch(s.SET_NOTIFICATION, __WEBPACK_IMPORTED_MODULE_0__config_js__["n" /* Notifications */][m.REMOVED]);
         }).catch(function (error) {
@@ -56521,6 +56525,289 @@ if (false) {
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 187 */,
+/* 188 */,
+/* 189 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(190);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("0f417a9e", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-097d4b4d\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Checkbox.vue", function() {
+     var newContent = require("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-097d4b4d\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Checkbox.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 190 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 191 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['item', 'prop', 'propKey', 'hideLabel'],
+    created: function created() {},
+
+    computed: {
+        checked: {
+            get: function get() {
+                return typeof this.item[this.propKey] == 'boolean' ? this.item[this.propKey] : false;
+            },
+            set: function set(val) {
+                this.item[this.propKey] = val;
+                console.log(this.item[this.propKey]);
+            }
+        }
+    }
+});
+
+/***/ }),
+/* 192 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", { staticClass: "field" }, [
+    _c("label", { staticClass: "checkbox" }, [
+      _c("input", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.checked,
+            expression: "checked"
+          }
+        ],
+        attrs: { type: "checkbox" },
+        domProps: {
+          checked: Array.isArray(_vm.checked)
+            ? _vm._i(_vm.checked, null) > -1
+            : _vm.checked
+        },
+        on: {
+          change: function($event) {
+            var $$a = _vm.checked,
+              $$el = $event.target,
+              $$c = $$el.checked ? true : false
+            if (Array.isArray($$a)) {
+              var $$v = null,
+                $$i = _vm._i($$a, $$v)
+              if ($$el.checked) {
+                $$i < 0 && (_vm.checked = $$a.concat([$$v]))
+              } else {
+                $$i > -1 &&
+                  (_vm.checked = $$a.slice(0, $$i).concat($$a.slice($$i + 1)))
+              }
+            } else {
+              _vm.checked = $$c
+            }
+          }
+        }
+      }),
+      _vm._v("\n        " + _vm._s(_vm.prop.label) + "\n    ")
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-097d4b4d", module.exports)
+  }
+}
+
+/***/ }),
+/* 193 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(194)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+var __vue_script__ = __webpack_require__(196)
+/* template */
+var __vue_template__ = __webpack_require__(197)
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-42bacc7a"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __vue_script__,
+  __vue_template__,
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "resources/assets/js/components/admin/generic/form/views/Text.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-42bacc7a", Component.options)
+  } else {
+    hotAPI.reload("data-v-42bacc7a", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+module.exports = Component.exports
+
+
+/***/ }),
+/* 194 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(195);
+if(typeof content === 'string') content = [[module.i, content, '']];
+if(content.locals) module.exports = content.locals;
+// add the styles to the DOM
+var update = __webpack_require__(2)("5af4b81f", content, false, {});
+// Hot Module Replacement
+if(false) {
+ // When the styles change, update the <style> tags
+ if(!content.locals) {
+   module.hot.accept("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-42bacc7a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Text.vue", function() {
+     var newContent = require("!!../../../../../../../../node_modules/css-loader/index.js!../../../../../../../../node_modules/vue-loader/lib/style-compiler/index.js?{\"vue\":true,\"id\":\"data-v-42bacc7a\",\"scoped\":true,\"hasInlineConfig\":true}!../../../../../../../../node_modules/vue-loader/lib/selector.js?type=styles&index=0!./Text.vue");
+     if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+     update(newContent);
+   });
+ }
+ // When the module is disposed, remove the <style> tags
+ module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 195 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(1)(false);
+// imports
+
+
+// module
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+
+// exports
+
+
+/***/ }),
+/* 196 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+
+/* harmony default export */ __webpack_exports__["default"] = ({
+    props: ['item', 'prop', 'propKey', 'hideLabel'],
+    created: function created() {}
+});
+
+/***/ }),
+/* 197 */
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "div",
+    { staticClass: "field" },
+    [
+      !_vm.hideLabel
+        ? [
+            _c("label", { staticClass: "label" }, [
+              _vm._v(_vm._s(_vm.prop.label))
+            ])
+          ]
+        : _vm._e(),
+      _vm._v(" "),
+      _c("p", [_vm._v("\n        " + _vm._s(_vm.prop.value) + "\n    ")])
+    ],
+    2
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-42bacc7a", module.exports)
+  }
+}
 
 /***/ })
 /******/ ]);

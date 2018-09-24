@@ -54,6 +54,10 @@
 
                 let hasProperty = prop.listView && prop.listView.property
                 let value = this.item[key]
+                // console.log('vlaue')
+                // console.log(key)
+                // console.log(this.item)
+                
 
                 if (hasProperty) {
                     switch(type) {

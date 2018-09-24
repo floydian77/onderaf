@@ -35,13 +35,27 @@ class EntryController extends Controller
      */
     public function store(Request $request)
     {
+        // $entry = new Entry();
+        // $entry->layout = $request->layout;
+        // $entry->data = $request->data;
+        // $entry->save();
+
+        $ids = [];
+
+        foreach ($request->categories as $category) {
+            array_push($ids, intval($category['id']));
+        }
+
         $entry = new Entry();
         $entry->layout = $request->layout;
         $entry->data = $request->data;
-        // $entry->initiative = $request->initiative;
+        $entry->status = $request->status;
         $entry->save();
+        $entry->categories()->sync($ids);
+
+        return response($entry, Response::HTTP_OK);
       
-        return response($entry, Response::HTTP_CREATED);
+        // return response($entry, Response::HTTP_CREATED);
     }
 
     /**
@@ -78,7 +92,7 @@ class EntryController extends Controller
         $entry->status = $request->status;
         $entry->save();
 
-        return response($ids, Response::HTTP_OK);
+        return response($entry, Response::HTTP_OK);
     }
 
     /**

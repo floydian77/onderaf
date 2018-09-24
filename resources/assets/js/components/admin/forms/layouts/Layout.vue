@@ -15,7 +15,7 @@
             </div>
         </div>
         <hr>
-        <div v-for="(item, index) in editedLayout.data" :key="index">
+        <div v-for="(item, index) in editedLayout.data" v-if="!item.inactive" :key="index">
             <div class="columns input-row">
                 <!-- Edit label -->
                 <div class="column field">
@@ -161,7 +161,8 @@
                 this.editedLayout.data.push(new Item({ id: Math.max(...this.ids()) + 1 }))
             },
             removeField(index) {
-                this.editedLayout.data.splice(index, 1)
+                // this.editedLayout.data.splice(index, 1)
+                this.editedLayout.data[index].inactive = true
             },
             sendFormData() {
 

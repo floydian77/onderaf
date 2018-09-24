@@ -4,7 +4,13 @@
             <label class="label">{{ prop.label }}</label>
         </template>
         <div class="control">
-            <input class="input is-small" :placeholder="prop.placeholder" v-model="value" type="text">
+            <template v-if="shouldBeTextArea()">
+                <textarea class="input is-small" :disabled="!editable()" :placeholder="prop.placeholder" v-model="value" type="text">
+                </textarea>
+            </template>
+            <template v-else>
+                <input class="input is-small" :disabled="!editable()" :placeholder="prop.placeholder" v-model="value" type="text">
+            </template>
         </div>
     </div>
 </template>
@@ -13,8 +19,8 @@
     export default {
         props: ['item', 'prop', 'propKey', 'hideLabel'],
         created() {
-            // console.log('text');
-            // console.log(this.item);
+            console.log('KU');
+            console.log(this.item);
             // console.log(this.propKey);
         },
         computed: {
@@ -26,6 +32,21 @@
                     this.item[this.propKey] = val
                 }
             }
+        },
+        methods: {
+            shouldBeTextArea() {
+                return this.item.type == 'text' && this.propKey == 'value'
+            },
+            // todo extract
+            editable() {
+                if (this.$route.meta.action == 'EDIT' 
+                    && this.prop.editable === false
+                    && (!this.item.temp || !this.item.temp.new)) {
+
+                    return false
+                }
+                return true
+            },
         }
     }
 </script>

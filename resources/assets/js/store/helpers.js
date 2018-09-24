@@ -25,7 +25,7 @@ import { Router } from '../routes.js'
 // domain is always plural?
 // capitalize domain?
 
-let s = Statics
+const s = Statics
 
 
 function addItem(state, item, domain, model) {
@@ -42,7 +42,7 @@ function addItem(state, item, domain, model) {
 
 function handleError(dispatch, error, message = 'failed') {
     console.log(error); 
-    dispatch(s.SET_NOTIFICATION, Notifications[message])
+    dispatch(Statics.SET_NOTIFICATION, Notifications[message])
 }
 
 // not used
@@ -53,6 +53,62 @@ function handleError(dispatch, error, message = 'failed') {
 // export const ModelLoadedState = (model) => { 
 //     return { [model]: false }
 // }
+function IsJsonString(str) {
+    try {
+        JSON.parse(str);
+    } catch (e) {
+        return false;
+    }
+    return true;
+}
+
+// todo absolutely disgusting
+export const RemoveKeys = (obj, keys) => {
+    var index;
+    
+    for (var prop in obj) {
+        // important check that this is objects own property
+        // not from prototype prop inherited
+        
+        if(obj.hasOwnProperty(prop)){
+            switch(typeof(obj[prop])){
+                case 'string':
+                    if (IsJsonString(obj[prop])) {
+                        index = keys.indexOf(prop);
+                        if(index > -1){
+                            delete obj[prop];
+                        }else{
+                            obj[prop] = JSON.stringify(RemoveKeys(JSON.parse(obj[prop]), keys));
+                        }
+                    }
+                    else {
+                        index = keys.indexOf(prop);
+                        if(index > -1){
+                            delete obj[prop];
+                        }
+                    }
+                    break;
+                case 'object':
+                    index = keys.indexOf(prop);
+                    if(index > -1){
+                        delete obj[prop];
+                    }else{
+                        RemoveKeys(obj[prop], keys);
+                    }
+                    break;
+            }
+        }
+    }
+    return obj
+}
+
+function cleanItem(item) {
+    let keys = [
+        'temp'
+    ]
+    return RemoveKeys(item, keys)
+}
+
 
 export const SetState = () => { 
     let state = {}
@@ -148,8 +204,12 @@ export const ModelActions = (model, domain) => {
         },
         [m.CREATE] ({ commit, dispatch }, item) {
             window.axios.post('/' + Urls.API + '/' + model, item).then((response) => {
+                // console.log('response');
+                // console.log(response);
+                item.id = response.data.id
                 // todo add to database here, success and fail flags
-                commit(m.CREATE, response.data)
+                // RemoveKeys(item, ['temp'])
+                commit(m.CREATE, item)
                 dispatch(s.SET_NOTIFICATION, Notifications[m.CREATED])
                 // go to list view
                 Router.push({ 
@@ -160,14 +220,9 @@ export const ModelActions = (model, domain) => {
             .catch((error) => handleError(dispatch, error))
         },
         [m.EDIT] ({ commit, dispatch }, item) {
-            // console.log('item');
-            // console.log(item);
             window.axios.put('/' + Urls.API + '/' + model + '/' + item.id, item).then((response) => {
-                // console.log('response');
-                // console.log(response);
-                
                 commit(m.EDIT, item)
-                dispatch(s.SET_NOTIFICATION, Notifications[m.EDITED])
+                dispatch(Statics.SET_NOTIFICATION, Notifications[m.EDITED])
                 // go to list view
                 Router.push({ 
                     name: ModelRoutesAndNames().names.LIST, 

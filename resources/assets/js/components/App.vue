@@ -102,6 +102,10 @@
         margin-bottom: 0.75rem;
     }
 
+    textarea {
+        resize: vertical
+    }
+
     /* Menu todo not mobile responsive */
     aside.column {
         height: 100vh;

@@ -15,6 +15,8 @@ import VueRouter from 'vue-router'
 
 import Admin from './components/admin/Admin.vue'
 import urlNotFound from './components/UrlNotFound.vue'
+import frontEndRedirect from './components/frontEndRedirect.vue'
+// import urlNotFound from './components/UrlNotFound.vue'
 import { Models, ModelRoutes } from './config'
 
 
@@ -27,14 +29,33 @@ for (let i = 0; i < modelRoutes.length; i++) {
   routes.push(modelRoutes[i])
 }
 
-routes.push(
-  {
-    path: '*',
-    name:'404', 
-    component: urlNotFound
-  },
-  { name: 'admin', path: '/', component: Admin },
-)
+
+
+// temp
+let subdomain = location.hostname.split('.').shift();
+if (subdomain == 'front') {
+  routes.push(
+    // {
+    //   path: '*',
+    //   name:'404', 
+    //   component: frontEndRedirect
+    // },
+    {
+      path: '/',
+      redirect: '/entries/create/layout/1'
+    },
+  )
+}
+else {
+  routes.push(
+    {
+      path: '*',
+      name:'404', 
+      component: urlNotFound
+    },
+    // { name: 'admin', path: '/', component: Admin },
+  )
+}
 
 Vue.use(VueRouter)
 

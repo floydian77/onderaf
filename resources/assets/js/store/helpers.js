@@ -210,12 +210,17 @@ export const ModelActions = (model, domain) => {
                 // todo add to database here, success and fail flags
                 // RemoveKeys(item, ['temp'])
                 commit(m.CREATE, item)
-                dispatch(s.SET_NOTIFICATION, Notifications[m.CREATED])
+                dispatch(Statics.SET_NOTIFICATION, Notifications[m.CREATED])
                 // go to list view
-                Router.push({ 
-                    name: ModelRoutesAndNames().names.LIST, 
-                    props: { model } 
-                })
+                // temp
+                let subdomain = location.hostname.split('.').shift();
+                if (subdomain != 'front') {
+                    Router.push({ 
+                        name: ModelRoutesAndNames().names.LIST, 
+                        props: { model } 
+                    })
+                }
+
             })
             .catch((error) => handleError(dispatch, error))
         },
@@ -224,6 +229,8 @@ export const ModelActions = (model, domain) => {
                 commit(m.EDIT, item)
                 dispatch(Statics.SET_NOTIFICATION, Notifications[m.EDITED])
                 // go to list view
+                // temp
+                window.dispatchEvent(new HashChangeEvent("hashchange"))
                 Router.push({ 
                     name: ModelRoutesAndNames().names.LIST, 
                     props: { model } 
@@ -234,7 +241,7 @@ export const ModelActions = (model, domain) => {
         [m.REMOVE] ({ commit, dispatch }, id) {
             window.axios.delete('/' + Urls.API + '/' + model + '/' + id).then((response) => {
                 commit(m.REMOVE, id)
-                dispatch(s.SET_NOTIFICATION, Notifications[m.REMOVED])
+                dispatch(Statics.SET_NOTIFICATION, Notifications[m.REMOVED])
             })
             .catch((error) => handleError(dispatch, error))
         },

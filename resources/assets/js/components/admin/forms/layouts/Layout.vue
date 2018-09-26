@@ -49,9 +49,9 @@
                     </div>
                 </div>
                 <div class="column">
-                    <button @click="indexUp(index)">Up</button>
-                    <button @click="indexDown(index)">Down</button>
-                    <button @click="removeField(index)">Remove field</button>
+                    <button class="button is-small" @click="indexUp(index)">Up</button>
+                    <button class="button is-small" @click="indexDown(index)">Down</button>
+                    <button class="button is-small" @click="removeField(index)">Remove field</button>
                 </div>
             </div>
             <div class="columns">
@@ -60,7 +60,7 @@
 
         </div>
             <!-- todo For now text inputs only -->
-        <button @click="addField()">Add field</button>
+        <button class="button is-small" @click="addField()">Add field</button>
     </div>
 </template>
 

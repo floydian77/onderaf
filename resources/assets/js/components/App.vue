@@ -1,19 +1,37 @@
 <template>
-    <div class="columns is-gapless">
-        <aside class="column is-narrow has-background-light">
-            <div class="section">
-                <sidebar></sidebar>
+    <div>
+        <template v-if="isFront">
+                <div class="container column">
+                    <front class="section"></front>
+                </div>
+        </template>
+        <template v-if="isLaravel">
+                <div class="container column">
+                    <!-- <front class="section"></front> -->
+                    <!-- <passport-clients></passport-clients>
+                    <passport-authorized-clients></passport-authorized-clients>
+                    <passport-personal-access-tokens></passport-personal-access-tokens> -->
+                </div>
+        </template>
+        <template v-if="isAdmin">
+            <div class="columns is-gapless">
+                <aside class="column is-narrow has-background-light">
+                    <div class="section">
+                        <sidebar></sidebar>
+                    </div>
+                </aside>
+                <div class="container column">
+                    <admin class="section"></admin>
+                </div>
             </div>
-        </aside>
-        <div class="container column">
-            <admin class="section"></admin>
-        </div>
+        </template>
     </div>
 </template>
 
 <script>
     // todo move sidebar to admin component
     import Admin from './admin/Admin.vue';
+    import Front from './front/Front.vue';
     import Sidebar from './admin/generic/Sidebar.vue';
     // import plugins from '../vue-plugins';
     import store from '../store/index';
@@ -28,8 +46,31 @@
     Vue.use(StorePlugin);
 
     export default {
+        data() {
+            return {
+                subdomain: ''
+            }
+        },
+        computed: {
+            // temp
+            isFront() {
+                return this.subdomain === 'front'
+            },
+            isAdmin() {
+                return this.subdomain === 'admin'
+            },
+            isLaravel() {
+                return this.subdomain === 'laravel'
+            },
+        },
+        created() {
+            console.log('app.vue');
+            
+            this.subdomain = location.hostname.split('.').shift();
+        },
         components: {
             Admin,
+            Front,
             Sidebar
         }
     }

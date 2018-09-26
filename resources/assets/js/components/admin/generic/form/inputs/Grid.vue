@@ -103,8 +103,8 @@
                     }
                 } 
                 else {
-                    console.log('currentValues');
-                    console.log(this.currentValues);
+                    // console.log('currentValues');
+                    // console.log(this.currentValues);
                     
                     for (let i = 0; i < this.prop.value.length; i++) {
                         if (this.prop.value[i].id == id) {

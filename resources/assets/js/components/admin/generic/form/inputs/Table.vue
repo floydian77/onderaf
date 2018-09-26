@@ -25,9 +25,9 @@
                             </td>
                             <template v-if="sortable">
                                 <td>
-                                    <button @click="indexUp(index)">Up</button>
-                                    <button @click="indexDown(index)">Down</button>
-                                    <button @click="removeRow(index)">Remove field</button>
+                                    <button class="button is-small" @click="indexUp(index)">Up</button>
+                                    <button class="button is-small" @click="indexDown(index)">Down</button>
+                                    <button class="button is-small" @click="removeRow(index)">Remove field</button>
                                 </td>
                             </template>
                         </tr>
@@ -35,7 +35,7 @@
                     </template>
                 </slot>
             </table>
-            <button @click="addRow()">{{ texts.table.ROW + ' ' + texts.actions.CREATE }}</button>
+            <button class="button is-small" @click="addRow()">{{ texts.table.ROW + ' ' + texts.actions.CREATE }}</button>
         </template>
     </div>
 </template>

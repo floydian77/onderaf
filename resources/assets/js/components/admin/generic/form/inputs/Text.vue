@@ -19,8 +19,8 @@
     export default {
         props: ['item', 'prop', 'propKey', 'hideLabel'],
         created() {
-            console.log('KU');
-            console.log(this.item);
+            // console.log('KU');
+            // console.log(this.item);
             // console.log(this.propKey);
         },
         computed: {

@@ -11,8 +11,7 @@
         Annuleren -->
 
         <div v-for="(prop, key) in model.properties" v-bind:key="key">
-            <component :is="inputComponent(prop.type)" :item="editedItem" :prop="prop" :propKey="key" 
-                       v-if="subdomain == 'admin' || !prop.adminOnly">
+            <component :is="inputComponent(prop.type)" :item="editedItem" :prop="prop" :propKey="key" v-if="!prop.adminOnly">
             </component>
         </div>
         <button class="button is-small" @click="submit">{{ submitLabel }}</button>
@@ -26,17 +25,12 @@
 
     export default {
         props: ['id', 'modelName'],
-        data() {
-            return {
-                subdomain: ''
-            } 
-        },
         created() {
             // console.log('blabla');
             // console.log(this.id);
             // console.log(this.modelName);
             
-            this.subdomain = location.hostname.split('.').shift();
+            // todo remove subdomain later
         },
         computed: {
             loaded() {

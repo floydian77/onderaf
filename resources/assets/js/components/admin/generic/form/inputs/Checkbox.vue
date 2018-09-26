@@ -19,7 +19,7 @@
                 },
                 set(val) {
                     this.item[this.propKey] = val
-                    console.log(this.item[this.propKey]) 
+                    // console.log(this.item[this.propKey]) 
                 }
             }
         }

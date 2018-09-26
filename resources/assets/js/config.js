@@ -197,6 +197,7 @@ export const Models = {
                     type: 'select'
                 },
                 type: 'relation',
+                // todo; 'static' is confusing here
                 static: true,
                 validation: {},
             },
@@ -236,6 +237,7 @@ export const Models = {
 //     input: ['label', 'type', 'values', 'placeholder']
 // }
 // todo validation column
+
 
 export const Statics = {
     SET_NOTIFICATION: 'setNotification'
@@ -384,7 +386,9 @@ export const ModelRoutesAndNames = () => {
     return { 
         routes: {
             LIST:   '/:modelName',
+            // todo 'create' should be merged with 'create_entry'
             CREATE: '/:modelName/:action',
+            // todo the app shouldn't support non-admin functions
             CREATE_ENTRY: '/:modelName/:action/layout/:id',
             EDIT:   '/:modelName/:action/:id',
         }, 

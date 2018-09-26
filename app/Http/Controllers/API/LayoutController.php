@@ -6,6 +6,8 @@ use App\Layout;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+
 
 class LayoutController extends Controller
 {

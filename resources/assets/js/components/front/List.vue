@@ -1,43 +1,37 @@
 <template>
     <div>
         <div v-if="loaded">
-            <Table class="table is-fullwidth">
-                <slot name="header">
-                    <!-- <tr> -->
-                        <th v-for="(prop, key) in properties" v-if="!prop.hideInList" :key="key">
-                            {{ prop.label }}
-                        </th>
-                        <!-- Fill header for button columns -->
-                        <th colspan="3"></th>
-                    <!-- </tr> -->
-                </slot>
-                <slot name="body">
-                    <Row
-                        v-for="item in items"
-                        :item="item"
-                        :modelName="modelName"
-                        :component="component"
-                        :key="item.id"
-                    >
-                    </Row>
-                </slot>
-            </Table>
+            <table class="table is-fullwidth">
+                    <thead>
+                        <tr>
+                            Formulier
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr
+                            v-for="item in items"
+                            :key="item.id"
+                        >
+                            Rij
+                            <router-link tag="button" :to="urls.CREATE"> 
+                                {{ item.name }}
+                            </router-link>
+                        </tr>
+                    </tbody>
+            </table>
             <!-- todo extract if check to config -->
-            <router-link v-if="!modelName == 'entries'" tag="button" :to="urls.CREATE"> 
-                {{ labels.CREATE }}
-            </router-link>
         </div>
         <div v-else>
             <!-- Add loading state -->
-            [Work in progress]
+            ...
         </div>
     </div>
 </template>
 
 <script>
-    import ListItem from "./ListItem.vue";
-    import Table from "../table/Table.vue";
-    import Row from "../table/Row.vue";
+    // import ListItem from "./ListItem.vue";
+    // import Table from "../table/Table.vue";
+    // import Row from "../table/Row.vue";
     import { Models, ModelLabels, ModelRoutingLabelsAndUrls } from "../../../../config.js"
 
     export default {

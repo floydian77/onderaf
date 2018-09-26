@@ -11,8 +11,9 @@ window.Popper = require('popper.js').default;
 try {
     window.$ = window.jQuery = require('jquery');
 
-    // TODO: might not work
     // require('bootstrap-material-design');
+    // temp..
+    require('bootstrap');
     require('bulma');
 } catch (e) {}
 

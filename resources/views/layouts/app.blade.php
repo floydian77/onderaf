@@ -25,6 +25,34 @@
 <body>
     <div id="app">
         <app></app>
+        <div id="userDetails">
+            @if (Auth::guest())
+                <a href="{{ route('login') }}">Login</a>
+                <a href="{{ route('register') }}">Register</a>
+            @else
+                {{ Auth::user()->name }}
+                <a href="{{ route('logout') }}">Logout</a>
+            @endif
+        </div>
     </div>
 </body>
+
+<script>
+    // temp
+    let subdomain = location.hostname.split('.').shift();
+    if (subdomain == 'admin') {
+        var loggedIn = "{{{ (auth()->check()) ? true : false }}}";
+        if (!!!loggedIn) {
+            window.location.href = "{{URL::to('login')}}"
+        }
+    }
+    else if (subdomain == 'front') {
+        window.location.href = "/#/entries/create/layout/1";
+        document.getElementById("userDetails").style.display = 'none';
+        window.onhashchange = function() { 
+            window.location.href = "/#/entries/create/layout/1";
+        }
+    }
+
+</script>
 </html>

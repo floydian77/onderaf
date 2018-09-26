@@ -5,7 +5,7 @@
     <entry-list></entry-list>
     <hr> -->
     
-    <breadcrumb></breadcrumb>
+    <!-- <breadcrumb></breadcrumb> -->
     <notification></notification>
     <router-view></router-view>
   </div>
@@ -15,14 +15,14 @@
     // todo works? change to list?
     // import LayoutList from './forms/layouts/List.vue';
     // import EntryList from './forms/entries/List.vue';
-    import Breadcrumb from './generic/Breadcrumb.vue';
-    import Notification from './generic/Notification.vue';
+    // import Breadcrumb from './generic/Breadcrumb.vue';
+    import Notification from '../admin/generic/Notification.vue';
 
     export default {
         components: {
             // LayoutList,
             // EntryList,
-            Breadcrumb,
+            // Breadcrumb,
             Notification
         },
         methods: {

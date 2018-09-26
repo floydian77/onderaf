@@ -7,8 +7,8 @@
         <hr>
         <div>
             <!-- todo just add this functionality in the child.. -->
-            <button @click="submit">{{ texts[type].buttonLabel }}</button>
-            <button @click="cancel">Cancel</button>
+            <button class="button is-small" @click="submit">{{ texts[type].buttonLabel }}</button>
+            <button class="button is-small" @click="cancel">Cancel</button>
         </div>
     </div>
     <div v-else>

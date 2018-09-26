@@ -42,13 +42,17 @@ class EntryController extends Controller
 
         $ids = [];
 
+        // Get ids for pivot table
         foreach ($request->categories as $category) {
             array_push($ids, intval($category['id']));
         }
 
         $entry = new Entry();
+
         $entry->layout = $request->layout;
         $entry->data = $request->data;
+
+        // Default properties if new entry from front-end
         $entry->status = $request->status;
         $entry->save();
         $entry->categories()->sync($ids);

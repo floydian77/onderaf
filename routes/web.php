@@ -28,13 +28,14 @@ Route::namespace('API')
         ]);
     });
 
-
 Auth::routes();
 
+// temp
+Route::view('/passport', 'passport');
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
-// todo temp
-Route::view('/back-test', 'back-test');
+
 
 

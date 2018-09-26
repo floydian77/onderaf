@@ -12,7 +12,7 @@
                 </router-link>
             </td>
             <td>
-                <a href="javascript:void(0)" @click="remove">
+                <a href="javascript:void(0)" @click="remove" v-if="!tempUndeletable">
                     {{ labels.REMOVE }}
                 </a>
             </td>
@@ -44,6 +44,10 @@
                 },
                 actions() { 
                     return ModelEventNames(this.modelName) 
+                },
+                // temp
+                tempUndeletable() {
+                    return this.modelName == 'layouts' && this.item.id == 1
                 }
         },
         methods: {

@@ -53130,7 +53130,7 @@ var render = function() {
           ),
           _vm._v(" "),
           !_vm.isEntry
-            ? _c("button", { staticClass: "button is-small add is-light" }, [
+            ? _c("button", { staticClass: "button is-small add" }, [
                 _vm._m(0),
                 _vm._v(" "),
                 _c(

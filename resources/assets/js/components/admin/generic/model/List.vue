@@ -26,7 +26,7 @@
                 </Row>
             </Table>
             <!-- todo extract if check to config -->
-            <button v-if="!isEntry" class="button is-small add is-light">
+            <button v-if="!isEntry" class="button is-small add">
                 <span class="icon is-small">
                     <i class="fas fa-plus"></i>
                 </span>

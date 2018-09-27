@@ -92,7 +92,7 @@ const store2 = new Vuex.Store({
             // todo do this in batches?
             dispatch('layoutsFill')
             dispatch('entriesFill')
-            dispatch('initiativesFill')
+            // dispatch('initiativesFill')
             dispatch('categoriesFill')
             dispatch('organisationsFill')
         },

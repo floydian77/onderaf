@@ -15,7 +15,7 @@
                        v-if="subdomain == 'admin' || !prop.adminOnly">
             </component>
         </div>
-        <button class="button is-small" @click="submit">{{ submitLabel }}</button>
+        <button class="button is-small is-info" @click="submit">{{ submitLabel }}</button>
     </div>
 </template>
 
@@ -99,5 +99,8 @@
 </script>
 
 <style scoped>
+    button.is-info {
+        margin-top: 20px
+    }
 
 </style>

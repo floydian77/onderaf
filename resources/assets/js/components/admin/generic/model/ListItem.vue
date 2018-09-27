@@ -2,24 +2,52 @@
         <!-- Columns: name, type, amount of entries -->
         <!-- Varying column type views: Text / icon, number, tags, images, status, button, options -->
         <tr>
+            <td>
+                <span class="icon is-small">
+                    <i class="fas fa-circle"></i>
+                </span>
+            </td>
             <td v-for="(prop, key) in model.properties" v-if="!prop.hideInList" v-bind:key="key">
                 <component  :is="viewComponent(view(prop, key).type)" 
                             :value="view(prop, key).value"></component>
             </td>
             <td>
-                <router-link :to="urls.EDIT(item.id)"> 
-                    {{ labels.EDIT }}
-                </router-link>
+                <button class="button is-small is-light">
+                    <router-link :to="urls.EDIT(item.id)"> 
+                        {{ labels.EDIT }}
+                        <!-- <span class="icon is-small">
+                            <i class="fas fa-pen"></i>
+                        </span> -->
+                    </router-link>
+                </button>
+                <button class="button is-small is-light" @click="remove" v-if="!tempUndeletable">
+                    <!-- {{ labels.REMOVE }} -->
+                    <span class="icon is-small">
+                        <i class="fas fa-times"></i>
+                    </span>
+                <!-- <a href="javascript:void(0)" @click="remove" v-if="!tempUndeletable">
+                </a> -->
+                </button>
+                <button v-if="modelName == 'entries'" class="button is-small is-light">
+                    <router-link :to="urls.CREATE_ENTRY(item.id)"> 
+                        <!-- {{ labels.CREATE }} -->
+                        <span class="icon is-small">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                    </router-link>
+                </button>
+                <button v-if="modelName == 'layouts'" class="button is-small is-light">
+                    <router-link :to="layoutUrls.CREATE_ENTRY(1)"> 
+                        <!-- {{ labels.CREATE }} -->
+                        <span class="icon is-small">
+                            <i class="fas fa-plus"></i>
+                        </span>
+                    </router-link>
+                </button>
             </td>
             <td>
-                <a href="javascript:void(0)" @click="remove" v-if="!tempUndeletable">
-                    {{ labels.REMOVE }}
-                </a>
             </td>
             <td v-if="modelName == 'entries'">
-                <router-link :to="urls.CREATE_ENTRY(item.id)"> 
-                    {{ labels.CREATE }}
-                </router-link>
             </td>
 
         </tr>
@@ -37,7 +65,11 @@
                     return Models[this.modelName] 
                 },
                 urls() { 
-                    return ModelRoutingLabelsAndUrls(this.modelName, this.model.domain || null).urls 
+                    return ModelRoutingLabelsAndUrls(this.modelName).urls 
+                },
+                // temp
+                layoutUrls() { 
+                    return ModelRoutingLabelsAndUrls('entries').urls 
                 },
                 labels() { 
                     return ModelLabels(this.modelName) 

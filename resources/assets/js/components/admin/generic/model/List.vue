@@ -1,31 +1,41 @@
 <template>
     <div>
         <div v-if="loaded">
-            <Table class="table is-fullwidth">
-                <slot name="header">
-                    <!-- <tr> -->
+            <table class="table is-fullwidth">
+                <thead>
+                    <tr>
+                        <th></th>
                         <th v-for="(prop, key) in properties" v-if="!prop.hideInList" :key="key">
-                            {{ prop.label }}
+                            <span>
+                                {{ prop.label }}
+                            </span>
                         </th>
                         <!-- Fill header for button columns -->
                         <th colspan="3"></th>
+                    </tr>
+                </thead>
+                    <!-- <tr> -->
                     <!-- </tr> -->
-                </slot>
-                <slot name="body">
-                    <Row
-                        v-for="item in items"
-                        :item="item"
-                        :modelName="modelName"
-                        :component="component"
-                        :key="item.id"
-                    >
-                    </Row>
-                </slot>
+                <Row
+                    v-for="item in items"
+                    :item="item"
+                    :modelName="modelName"
+                    :component="component"
+                    :key="item.id"
+                >
+                </Row>
             </Table>
             <!-- todo extract if check to config -->
-            <router-link v-if="!modelName == 'entries'" tag="button" :to="urls.CREATE"> 
-                {{ labels.CREATE }}
-            </router-link>
+            <button v-if="!isEntry" class="button is-small add is-light">
+                <span class="icon is-small">
+                    <i class="fas fa-plus"></i>
+                </span>
+                <span>
+                    <router-link :to="urls.CREATE"> 
+                        {{ labels.CREATE }}
+                    </router-link>
+                </span>
+            </button>
         </div>
         <div v-else>
             <!-- Add loading state -->
@@ -50,6 +60,10 @@
             }
         }, 
         computed: {
+            isEntry() {
+                // temp
+                return this.modelName == 'entries' || this.modelName == 'layouts'
+            },
             model() {
                 return Models[this.modelName]
             },
@@ -86,5 +100,8 @@
 </script>
 
 <style scoped>
+    .button.add {
+        margin-top: 40px;
+    }
 
 </style>

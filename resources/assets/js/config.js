@@ -64,21 +64,21 @@ export const Models = {
             },
         } 
     },
-    'initiatives': {
-        domain: 'groups',
-        label: {
-            singular: 'Initiatief',
-            plural: 'Initiatieven'
-        },
-        properties: {
-            'name': {
-                label: 'Naam',
-                type: 'textfield',
-                placeholder: 'Vul hier een naam in',
-                validation: {},
-            },
-        } 
-    },
+    // 'initiatives': {
+    //     domain: 'groups',
+    //     label: {
+    //         singular: 'Initiatief',
+    //         plural: 'Initiatieven'
+    //     },
+    //     properties: {
+    //         'name': {
+    //             label: 'Naam',
+    //             type: 'textfield',
+    //             placeholder: 'Vul hier een naam in',
+    //             validation: {},
+    //         },
+    //     } 
+    // },
     'organisations': {
         domain: 'groups',
         label: {
@@ -186,6 +186,7 @@ export const Models = {
             },
             'layout': {
                 label: 'Layout',
+                adminOnly: true,
                 listView: {
                     property: 'name'
                 },
@@ -371,6 +372,7 @@ export const ModelLabels = (model) => {
         CREATE: modelLabel.singular + ' ' + actionLabels.CREATE,
         CREATED: modelLabel.singular + ' ' + actionLabels.CREATED,
         EDIT: modelLabel.singular + ' ' + actionLabels.EDIT,
+        EDIT: modelLabel.singular + ' ' + actionLabels.EDIT,
         EDITED: modelLabel.singular + ' ' + actionLabels.EDITED,
         REMOVE: modelLabel.singular + ' ' + actionLabels.REMOVE,
         REMOVED: modelLabel.singular + ' ' + actionLabels.REMOVED,
@@ -417,7 +419,7 @@ export const ModelRouteNamesToLabels = (model) => {
 
 
 
-export const ModelRoutingLabelsAndUrls = (model, domain) => {
+export const ModelRoutingLabelsAndUrls = (model, domain = null) => {
     // let string = ModelDomainString(model, domain),
     let labels = ModelLabels(model)
 

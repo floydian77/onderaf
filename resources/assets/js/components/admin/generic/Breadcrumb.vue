@@ -63,7 +63,9 @@
 <style scoped>
     .breadcrumb {
         background-color: #c3c3c31c;
-        padding: 5px 15px;
+        padding: 6px 15px;
+        margin-bottom: 40px;
+        /* padding-top: 8px; */
     }
 
     .no-route {
@@ -74,6 +76,11 @@
         pointer-events: none;
         text-decoration: none;
         cursor: default;
+    }
+
+    ul li {
+        font-weight: 600;
+        font-size: .75rem;
     }
 
 </style>

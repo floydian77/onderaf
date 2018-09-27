@@ -36,7 +36,7 @@
     padding: 0.5rem;
     font-weight: 600;
     font-size: 0.8rem;
-    border-radius: 0;
+    border-radius: 4px;
 }
 
 .notification .delete {

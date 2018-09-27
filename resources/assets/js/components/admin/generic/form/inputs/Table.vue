@@ -1,18 +1,17 @@
 <template>
     <div>
         <template v-if="prop.columns">
-            <Table class="table is-fullwidth">
-                <slot name="header">
+            <table class="table form is-fullwidth">
                     <thead>
                         <tr>
                             <th v-for="(col, key) in prop.columns" :key="key">
-                                {{ col.label }}
+                                <span>
+                                    {{ col.label }}
+                                </span>
                             </th>
                             <th></th>
                         </tr>
                     </thead>
-                </slot>
-                <slot name="body">
                     <template v-if="item[propKey]">
                         <tr v-for="(value, index) in values" v-if="!value.inactive" :key="index">
                             <td v-for="(col, key) in prop.columns" :key="key">
@@ -24,18 +23,28 @@
                                             </component>
                             </td>
                             <template v-if="sortable">
-                                <td>
-                                    <button class="button is-small" @click="indexUp(index)">Up</button>
-                                    <button class="button is-small" @click="indexDown(index)">Down</button>
-                                    <button class="button is-small" @click="removeRow(index)">Remove field</button>
+                                <td class="buttons">
+                                    <button class="button is-light is-small" @click="indexUp(index)">Up</button>
+                                    <button class="button is-light is-small" @click="indexDown(index)">Down</button>
+                                    <button class="button is-light is-small" @click="removeRow(index)">
+                                        <span class="icon is-small">
+                                            <i class="fas fa-times"></i>
+                                        </span>
+                                    </button>
                                 </td>
                             </template>
                         </tr>
 
                     </template>
-                </slot>
             </table>
-            <button class="button is-small" @click="addRow()">{{ texts.table.ROW + ' ' + texts.actions.CREATE }}</button>
+            <button class="button is-small" @click="addRow()">
+                <span class="icon is-small">
+                    <i class="fas fa-plus"></i>
+                </span>
+                <span>
+                    {{ texts.table.ROW + ' ' + texts.actions.CREATE }}
+                </span>
+            </button>
         </template>
     </div>
 </template>
@@ -135,5 +144,8 @@
 </script>
 
 <style scoped>
+    .table {
+        margin-bottom: 10px;
+    }
 
 </style>

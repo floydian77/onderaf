@@ -30,7 +30,7 @@
         <div id="userDetails">
             @if (Auth::guest())
                 <a href="{{ route('login') }}">Login</a>
-                <a href="{{ route('register') }}">Register</a>
+                <!-- <a href="{{ route('register') }}">Register</a> -->
             @else
                 {{ Auth::user()->name }}
                 <a href="{{ route('logout') }}">Logout</a>

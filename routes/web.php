@@ -37,6 +37,8 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::get('/logout', '\App\Http\Controllers\Auth\LoginController@logout');
 
 
+Route::view('/register', 'welcome');
+
 
 Route::fallback(function () {
     return view('welcome');

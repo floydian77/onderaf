@@ -49,10 +49,10 @@
         }
     }
     else if (subdomain == 'front') {
-        window.location.href = "/#/entries/create/layout/1";
+        window.location.href = "http://front.unfu.io/#/entries/create/layout/1";
         document.getElementById("userDetails").style.display = 'none';
         window.onhashchange = function() { 
-            window.location.href = "/#/entries/create/layout/1";
+            window.location.href = "http://front.unfu.io/#/entries/create/layout/1";
         }
     }
 

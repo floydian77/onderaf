@@ -27,10 +27,10 @@ class AddForeignKeys extends Migration
         //     $table->unsignedInteger('parent_id');
         //     $table->foreign('parent_id')->references('id')->on('conditions')->nullable();
         // });
-        Schema::table('entries', function (Blueprint $table) {
-            $table->string('layout');
-            $table->foreign('layout')->references('id')->on('layouts');
-        });
+//        Schema::table('entries', function (Blueprint $table) {
+//            $table->string('layout');
+//            $table->foreign('layout')->references('id')->on('layouts');
+//        });
         // Schema::table('form_entries', function (Blueprint $table) {
         //     $table->string('form_layout');
         //     $table->foreign('form_layout')->references('name')->on('form_layouts');
